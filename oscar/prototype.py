@@ -3,10 +3,43 @@ import warnings
 
 _PATH = os.path.dirname(__file__)
 _DEFAULT_OUTPUT_DIAGNOSTICS = [
-        'D_CO2', 'D_CH4', 'D_N2O', 'RF_halo', 'D_O3t',
-        'D_O3s', 'D_SO4', 'D_POA', 'D_BC', 'D_NO3',
-        'D_SOA', 'D_AERh', 'RF', 'D_gst'
+    'D_CO2', 'D_CH4', 'D_N2O', 'RF_halo', 'D_O3t',
+    'D_O3s', 'D_SO4', 'D_POA', 'D_BC', 'D_NO3',
+    'D_SOA', 'D_AERh', 'RF', 'D_gst', 'D_OHC'
 ]
+_SIMPLE_EMISSIONS = [
+    'EFF', 'ECH4', 'EN2O', 'ENOX', 'ECO', 'EVOC', 'ESO2', 'ENH3',
+    'EOC', 'EBC'
+]
+_RF_DRIVERS = [
+    'RFsolar', 'RFvolc', 'RFcon'
+]
+
+
+def unpack_regions(data, regions):
+    """Converts a 2D array of columns with regional data to a dictionary
+    mapping region names to 1D arrays"""
+    result = {}
+    for i, region in enumerate(regions):
+        result[region] = data[:, i]
+    return result
+
+
+def sum_dict(data):
+    """Sums arrays stored in a dict"""
+    return sum([values for key, values in data.items()])
+
+
+def _merge_dicts(*dict_args):
+    """Merge the given dictionaries into single dict.
+    Given any number of dicts, shallow copy and merge into a new dict,
+    precedence goes to key value pairs in latter dicts.
+    From http://stackoverflow.com/a/26853961/1706640
+    """
+    result = {}
+    for dictionary in dict_args:
+        result.update(dictionary)
+    return result
 
 
 class OSCAR(object):
@@ -19,7 +52,7 @@ class OSCAR(object):
                  data_EBC='ACCMIP', data_RFant='IPCC-AR5',
                  data_RFnat='IPCC-AR5', mod_DATAscen='trends', scen_ALL=None,
                  scen_EFF='stop', scen_LULCC='stop', scen_ECH4='stop',
-                 scen_N2O='stop', scen_Ehalo='stop', scen_ENOX='stop',
+                 scen_EN2O='stop', scen_Ehalo='stop', scen_ENOX='stop',
                  scen_ECO='stop', scen_EVOC='stop', scen_ESO2='stop',
                  scen_ENH3='stop', scen_EOC='stop', scen_EBC='stop',
                  scen_RFant='stop', scen_RFnat='stop'):
@@ -173,7 +206,7 @@ class OSCAR(object):
             self.scen_EFF = scen_ALL
             self.scen_LULCC = scen_ALL
             self.scen_ECH4 = scen_ALL
-            self.scen_N2O = scen_ALL
+            self.scen_EN2O = scen_ALL
             self.scen_Ehalo = scen_ALL
             self.scen_ENOX = scen_ALL
             self.scen_ECO = scen_ALL
@@ -188,7 +221,7 @@ class OSCAR(object):
             self.scen_EFF = scen_EFF
             self.scen_LULCC = scen_LULCC
             self.scen_ECH4 = scen_ECH4
-            self.scen_N2O = scen_N2O
+            self.scen_EN2O = scen_EN2O
             self.scen_Ehalo = scen_Ehalo
             self.scen_ENOX = scen_ENOX
             self.scen_ECO = scen_ECO
@@ -221,7 +254,7 @@ class OSCAR(object):
             locals()['_PATH'] = _PATH
 
             execfile(os.path.join(_PATH, 'OSCAR.py'), locals())
-            
+
             ind_final = end_year - 1700
             if ind_final < 0:
                 raise ValueError('end_year must be greater than 1700; '
@@ -248,7 +281,7 @@ class OSCAR(object):
             scen_EFF = self.scen_EFF
             scen_LULCC = self.scen_LULCC
             scen_ECH4 = self.scen_ECH4
-            scen_N2O = self.scen_N2O
+            scen_EN2O = self.scen_EN2O
             scen_Ehalo = self.scen_Ehalo
             scen_ENOX = self.scen_ENOX
             scen_ECO = self.scen_ECO
@@ -264,5 +297,19 @@ class OSCAR(object):
             execfile(os.path.join(_PATH, 'OSCAR-loadP.py'), locals())
             execfile(os.path.join(_PATH, 'OSCAR-format.py'), locals())
             execfile(os.path.join(_PATH, 'OSCAR-fct.py'), locals())
-            output = locals()['OSCAR_lite'](var_output=var_output)
-            return {name: values for name, values in zip(var_output, output)}
+
+            # Based on TPCLIMAT_Vfinal; TODO: add complex emissions
+            reference_vars = locals().copy()
+            regions = locals()['regionI_name']
+            regions[0] = 'Bunker fuels'
+            input_data = {name: unpack_regions(reference_vars[name], regions)
+                          for name in _SIMPLE_EMISSIONS}
+            for name in input_data:
+                input_data[name]['Total'] = sum_dict(input_data[name])
+
+            rf_drivers = {name: reference_vars[name] for name in _RF_DRIVERS}
+
+            result = locals()['OSCAR_lite'](var_output=var_output)
+            output_data = {name: values for name, values in zip(var_output,
+                                                                result)}
+            return _merge_dicts(input_data, output_data, rf_drivers)
