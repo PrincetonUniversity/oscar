@@ -78,9 +78,15 @@ for X in ['I','J']:
 
     region_index = {}
     TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/Regions_GTAP/#DATA.Regions_GTAP.csv'),'r'))])[:,2:]
+
+    # Iterate over the rows of the CSV file (ignoring the first row)
     for n in range(1,len(TMP)):
+        # If the regions label is in the header, then assign the value in the
+        # regions label's column to a dictionary (with the unique region code
+        # as a key).  E.g. for Australia and SRES11 it would be {1: 3}.
         if mod_region in list(TMP[0]):
             region_index[int(TMP[n,0])] = int(TMP[n,list(TMP[0]).index(mod_region)])
+        # Otherwise set the pooled region to be represented by zero
         else:
             region_index[int(TMP[n,0])] = 0
 
@@ -320,6 +326,7 @@ nb_ODS = len(ODS)
 #   1. GREENHOUSE GASES
 ##################################################
 
+# Indexing goes year, region, sector, kind, (redundant region)
 EFF = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind,nb_regionI], dtype=dty) # {GtC/yr}
 ECH4 = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind,nb_regionI], dtype=dty) # {TgC/yr}
 EN2O = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind,nb_regionI], dtype=dty) # {TgN/yr}
@@ -337,6 +344,11 @@ kin = ['sol','liq','gas','cem','fla']
 EFFcdiac = np.zeros([ind_cdiac+1,nb_regionJ,nb_sector,nb_kind,nb_regionI], dtype=dty)
 for k in range(len(kin)):
     TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/EFossil_CDIAC/#DATA.EFossil_CDIAC.1751-2010_114reg0.EFF_'+kin[k]+'.csv'),'r'))], dtype=dty)
+    # Iterate over all sub-regions, totaling the emissions in each pooled
+    # region for the particular region group selected.  There are 114 columns
+    # in the CSV file, representing (in this case) the fossil fuel emissions in
+    # each of the 114 sub-regions described in the #DATA.Regions_GTAP.csv file.
+    # Emissions start in year 1751 in this case.
     for i in range(114+1):
         EFFcdiac[51:ind_cdiac+1,regionJ_index[i],0,kFF,regionI_index[i]] += TMP[:ind_cdiac-51+1,i]
 
@@ -523,10 +535,16 @@ if (scen_EFF[:4] == 'SRES')&(ind_final > ind_cdiac):
     for i in range(4+1):
         if (mod_regionI == 'SRES4')&(mod_regionJ == 'SRES4'):
             EFFproj[300:min(ind_final,400)+1,i,0,kFF,i] += TMP[:min(ind_final,400)-300+1,i]
+        # These middle two elif's are the only one's that matter; essentially
+        # if the regional aggregation for the scenario matches that in the
+        # emissions scenario selected, then distribute the emissions among the
+        # emissions.   Otherwise, put all emissions in the 0th index region
+        # bin.  Does this impact the solution at all?
         elif (mod_regionI == 'SRES4')&(mod_regionJ != 'SRES4'):
             EFFproj[300:min(ind_final,400)+1,0,0,kFF,i] += TMP[:min(ind_final,400)-300+1,i]
         elif (mod_regionI != 'SRES4')&(mod_regionJ == 'SRES4'):
             EFFproj[300:min(ind_final,400)+1,i,0,kFF,0] += TMP[:min(ind_final,400)-300+1,i]
+
         elif(mod_regionI != 'SRES4')&(mod_regionJ != 'SRES4'):
             EFFproj[300:min(ind_final,400)+1,0,0,kFF,0] += TMP[:min(ind_final,400)-300+1,i]
 
@@ -757,9 +775,8 @@ for VAR in ['FF','CH4','N2O']:
     elif (scen == 'cst')&(ind_final > ind_cdiac):
         exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'[ind_cdiac,...][np.newaxis,...]')        
 
-    # RCP or SRES scenarios
-    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP'))&(ind_final > ind_cdiac):
-        
+    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP'))&(ind_final > ind_cdiac): 
+
         # raw discontinuity
         if (mod_DATAscen == 'raw'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...]')

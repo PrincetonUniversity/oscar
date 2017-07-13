@@ -246,7 +246,8 @@ class OSCAR(object):
         Returns
         -------
         dict
-            A mapping of variable names to 1D timeseries arrays
+            A mapping of variable names to 1D timeseries arrays or dictionaries
+            of 1D timeseries arrays
         """
         # Suppress numpy divide by zero warnings
         with warnings.catch_warnings():
