@@ -573,10 +573,6 @@ if (scen_EN2O[:4] == 'SRES')&(ind_final > ind_cdiac):
             EN2Oproj[300:min(ind_final,400)+1,i,0,kindGHG_index['N2O'],0] += TMP[:min(ind_final,400)-300+1,i]
         elif(mod_regionI != 'SRES4')&(mod_regionJ != 'SRES4'):
             EN2Oproj[300:min(ind_final,400)+1,0,0,kindGHG_index['N2O'],0] += TMP[:min(ind_final,400)-300+1,i]
-
-# Hack to get custom scenarios working (this is just a trial)
-if isinstance(scen_EFF, np.ndarray):
-    EFFproj[311:min(ind_final, scen_EFF.shape[0] + 311) + 1, 0, 0, kFF, 0] += scen_EFF[:min(ind_final, scen_EFF.shape[0] + 311) - 311 + 1]
             
 # =========
 # 1.10. RCP
@@ -779,15 +775,10 @@ for VAR in ['FF','CH4','N2O']:
     elif (scen == 'cst')&(ind_final > ind_cdiac):
         exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'[ind_cdiac,...][np.newaxis,...]')        
 
-    # Add isinstance option
-    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP')|isinstance(scen, np.ndarray))&(ind_final > ind_cdiac): 
+    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP'))&(ind_final > ind_cdiac): 
 
         # raw discontinuity
-        if isinstance(scen, np.ndarray):
-            # Always go with raw option here (for now...)
-            exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...]')
-            
-        elif (mod_DATAscen == 'raw'):
+        if (mod_DATAscen == 'raw'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...]')
 
         # offset at transition point
