@@ -45,8 +45,10 @@ attrib_FEEDBACKS = 'emitters'           # [deprecated]
 attrib_ELUCdelta = 'causal'             # [deprecated]
 attrib_ELUCampli = 'causal'             # [deprecated]
 
-mod_regionI = 'Houghton'                # SRES4 | SRES11 | RECCAP* | Raupach* | Houghton | IMACLIM | Kyoto | RCP5 | RCP10*
-mod_regionJ = 'RCP5'                    # SRES4 | SRES11 | RECCAP* | Raupach* | Houghton | IMACLIM | Kyoto | RCP5 | RCP10*
+mod_regionI = 'Houghton'                # SRES4 | SRES11 | RECCAP* | Raupach* |Houghton | IMACLIM | Kyoto | RCP5 | RCP10*
+
+# Make mod_regionJ 'Houghton'; RCP5 or SRES4 cause problems
+mod_regionJ = 'Houghton'                    # SRES4 | SRES11 | RECCAP* | Raupach* | Houghton | IMACLIM | Kyoto | RCP5 | RCP10*
 mod_sector = ''                         # '' | Time | TimeRCP
 mod_kindFF = 'one'                      # one | CDIAC
 mod_kindLUC = 'one'                     # one | all

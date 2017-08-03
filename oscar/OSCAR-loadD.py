@@ -21,6 +21,8 @@ import csv
 
 import numpy as np
 
+from oscar import Projection
+
 print 'LOADING: DRIVERS'
 
 ##################################################
@@ -96,7 +98,7 @@ for X in ['I','J']:
     exec('region'+X+'_index = dict([(0,0)]+region_index.items())')
     exec('nb_region'+X+' = len(region'+X+')')
 
-    del region,region_name,region_color,region_index
+    del region,region_name,region_color
 
 # ============
 # A.2. Sectors
@@ -573,7 +575,7 @@ if (scen_EN2O[:4] == 'SRES')&(ind_final > ind_cdiac):
             EN2Oproj[300:min(ind_final,400)+1,i,0,kindGHG_index['N2O'],0] += TMP[:min(ind_final,400)-300+1,i]
         elif(mod_regionI != 'SRES4')&(mod_regionJ != 'SRES4'):
             EN2Oproj[300:min(ind_final,400)+1,0,0,kindGHG_index['N2O'],0] += TMP[:min(ind_final,400)-300+1,i]
-
+            
 # =========
 # 1.10. RCP
 # =========
@@ -622,6 +624,37 @@ if (scen_EN2O[:3] == 'RCP')&(ind_final > ind_cdiac):
         elif (mod_regionI != 'RCP5')&(mod_regionJ != 'RCP5'):
             EN2Oproj[300:min(ind_final,400)+1,0,0,kindGHG_index['N2O'],0] += TMP[:min(ind_final,400)-300+1,i]
 
+### SKC ### Enable Custom Emissions Scenarios for EFF, ECH4, and EN2O
+
+if isinstance(scen_EFF, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_EFF, regionI_index, nb_regionI, nb_sector, nb_kind, kFF,
+    'scen_EFF').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        EFFproj[300:min(ind_final + 1, end_idx), 0, 0, kFF, i] = projection[:end_idx_scen, 0, 0, kFF, i]
+
+if isinstance(scen_ECH4, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_ECH4, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindGHG_index['CH4'], 'scen_ECH4').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        ECH4proj[300:min(ind_final + 1, end_idx), 0, 0, kindGHG_index['CH4'], i] = projection[:end_idx_scen, 0, 0, kindGHG_index['CH4'], i]
+
+if isinstance(scen_EN2O, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_EN2O, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindGHG_index['N2O'], 'scen_EN2O').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        EN2Oproj[300:min(ind_final + 1, end_idx), 0, 0, kindGHG_index['N2O'], i] = projection[:end_idx_scen, 0, 0, kindGHG_index['N2O'], i]
+        
+###########
+            
 # =================
 # 1.A. PAST DATASET
 # =================
@@ -775,7 +808,8 @@ for VAR in ['FF','CH4','N2O']:
     elif (scen == 'cst')&(ind_final > ind_cdiac):
         exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'[ind_cdiac,...][np.newaxis,...]')        
 
-    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP'))&(ind_final > ind_cdiac): 
+    # Add isinstance option
+    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP')|isinstance(scen, np.ndarray))&(ind_final > ind_cdiac): 
 
         # raw discontinuity
         if (mod_DATAscen == 'raw'):
@@ -1066,6 +1100,8 @@ if (scen_Ehalo[:3] == 'RCP')&(ind_final > ind_cdiac):
     for x in range(len(lgd)):
         EODSproj[300:min(ind_final,400)+1,0,0,kindGHG_index['ODS'],0,ODS.index(lgd[x])] = TMP[:min(ind_final,400)-300+1,x]
 
+# TODO: Add custom logic
+        
 # =================
 # 3.A. PAST DATASET
 # =================
@@ -1394,6 +1430,75 @@ for VAR in ['SO2','NH3','OC','BC']:
                     elif (mod_regionI != 'RCP5')&(mod_regionJ != 'RCP5'):
                         exec('E'+VAR+'proj[300:min(ind_final,400)+1,0,0,kindAER_index[VAR],0] += TMP[:min(ind_final,400)-300+1,i]')
 
+### SKC ### Enable custom emissions scenarios for short-lived species
+# ENOX, ECO, EVOC, ESO2, ENH3, EOC, EBC
+
+if isinstance(scen_ENOX, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_ENOX, regionI_index, nb_regionI, nb_sector, nb_kind, kindCHI_index['NOX'],
+    'scen_ENOX').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        ENOXproj[300:min(ind_final + 1, end_idx), 0, 0, kindCHI_index['NOX'], i] = projection[:end_idx_scen, 0, 0, kindCHI_index['NOX'], i]
+
+if isinstance(scen_ECO, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_ECO, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindCHI_index['CO'], 'scen_ECO').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        ECOproj[300:min(ind_final + 1, end_idx), 0, 0, kindCHI_index['CO'], i] = projection[:end_idx_scen, 0, 0, kindCHI_index['CO'], i]
+
+if isinstance(scen_EVOC, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_EVOC, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindCHI_index['VOC'], 'scen_EVOC').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        EVOCproj[300:min(ind_final + 1, end_idx), 0, 0, kindCHI_index['VOC'], i] = projection[:end_idx_scen, 0, 0, kindCHI_index['VOC'], i]
+
+if isinstance(scen_ESO2, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_ESO2, regionI_index, nb_regionI, nb_sector, nb_kind, kindAER_index['SO2'],
+    'scen_ESO2').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        ESO2proj[300:min(ind_final + 1, end_idx), 0, 0, kindAER_index['SO2'], i] = projection[:end_idx_scen, 0, 0, kindAER_index['SO2'], i]
+
+if isinstance(scen_ENH3, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_ENH3, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindAER_index['NH3'], 'scen_ENH3').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        ENH3proj[300:min(ind_final + 1, end_idx), 0, 0, kindAER_index['NH3'], i] = projection[:end_idx_scen, 0, 0, kindAER_index['NH3'], i]
+
+if isinstance(scen_EOC, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_EOC, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindAER_index['OC'], 'scen_EOC').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        EOCproj[300:min(ind_final + 1, end_idx), 0, 0, kindAER_index['OC'], i] = projection[:end_idx_scen, 0, 0, kindAER_index['OC'], i]
+
+if isinstance(scen_EBC, np.ndarray) and (ind_final > ind_cdiac):
+    projection = Projection(
+        scen_EBC, regionI_index, nb_regionI, nb_sector, nb_kind,
+    kindAER_index['BC'], 'scen_EBC').coarsen()
+    end_idx = 300 + projection.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    for i in range(nb_regionI):
+        EBCproj[300:min(ind_final + 1, end_idx), 0, 0, kindAER_index['BC'], i] = projection[:end_idx_scen, 0, 0, kindAER_index['BC'], i]
+        
+###########
+
+                        
 # =================
 # 4.A. PAST DATASET
 # =================
@@ -1492,8 +1597,8 @@ for VAR in ['NOX','CO','VOC']+['SO2','NH3','OC','BC']:
     elif (scen == 'cst')&(ind_final > ind_cdiac):
         exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'[ind_cdiac,...][np.newaxis,...]')        
 
-    # RCP or SRES scenarios
-    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP'))&(ind_final > ind_cdiac):
+    # RCP or SRES scenarios; SKC: Add isinstance option
+    elif ((scen[:4] == 'SRES')|(scen[:3] == 'RCP')|isinstance(scen, np.ndarray))&(ind_final > ind_cdiac):
         
         # raw discontinuity
         if (mod_DATAscen == 'raw'):
