@@ -56,6 +56,9 @@ class Projection(object):
         if two_dimensional and (self.values.shape[1] == _CDIAC_REGIONS):
             for i in range(1, _CDIAC_REGIONS):
                 # Sector always seems to be index zero
+
+                # Region number equals index number; first column is always
+                # all zeros!
                 coarsened[:, 0, 0, self.kind,
                           self.region_index[i]] += self.values[:, i]
         elif one_dimensional:
