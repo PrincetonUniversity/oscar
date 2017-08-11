@@ -65,13 +65,14 @@ class Projection(object):
             # All emissions go into global region
             coarsened[:, 0, 0, self.kind, 0] = self.values
         else:
-            raise ValueError('Specified emissions array for {} has improper shape.'
-                             'Emissions must be either column vector specifying'
-                             'global emissions with'
-                             'length number of years since the year 2000'
-                             'or it must be a 2D array specifying fine-grain'
-                             'regional emissions for each region in the CDIAC'
-                             'dataset.  Got array of shape {}'.format(self.var,
-                                                                      self.values.shape)
+            raise ValueError(
+                'Specified emissions array for {} has improper shape.'
+                'Emissions must be either column vector specifying'
+                'global emissions with'
+                'length number of years since the year 2000'
+                'or it must be a 2D array specifying fine-grain'
+                'regional emissions for each region in the CDIAC'
+                'dataset.  Got array of shape {}'.format(self.var,
+                                                         self.values.shape)
             )
         return coarsened
