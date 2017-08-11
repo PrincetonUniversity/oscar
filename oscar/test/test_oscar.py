@@ -87,3 +87,14 @@ def test_complex_custom_scenario():
                    mod_regionI='RCP5').run(2100)['D_gst']
     expected = OSCAR(scen_EFF='RCP8.5', mod_regionI='RCP5').run(2100)['D_gst']
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
+
+
+def test_year_too_small_error():
+    with pytest.raises(ValueError):
+        OSCAR().run(2009)
+
+
+def test_bad_scenario_input():
+    case = OSCAR(scen_EFF=np.zeros((100, 2)))
+    with pytest.raises(ValueError):
+        case.run(2100)
