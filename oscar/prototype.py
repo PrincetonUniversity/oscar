@@ -257,9 +257,10 @@ class OSCAR(object):
             execfile(os.path.join(_PATH, 'OSCAR.py'), locals())
 
             ind_final = end_year - 1700
-            if ind_final < 0:
-                raise ValueError('end_year must be greater than 1700; '
-                                 'got {}'.format(end_year))
+            if ind_final < 310:
+                raise ValueError('For the model to run properly, the end_year '
+                                 'must be greater than 2009; '
+                                 'got end_year = {}.'.format(end_year))
 
             fT = self.fT
             mod_regionI = self.mod_regionI

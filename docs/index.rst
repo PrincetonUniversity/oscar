@@ -26,6 +26,7 @@ Documentation
    data_sources.rst
    built_in_scens.rst
    custom_scens.rst
+   regions.rst
    api.rst
 
 Resources
