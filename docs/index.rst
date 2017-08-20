@@ -9,6 +9,11 @@
 oscar: a compact Earth system model
 ###################################
 
+This documentation describes an adaptation of the OSCAR compact Earth system model for use in
+the Princeton course, `Modeling the Earth System: Assessing Strategies for
+Mitigating Climate Change (ENV367) <https://registrar.princeton.edu/course-offerings/course_details.xml?courseid=014229&term=1182>`_.  The model was originally developed by Gasser et al. in 2017
+[#GMD]_.  This is a work in progress.  
+
 TODO(Spencer): add high-level summary of the model here
 
 Documentation
@@ -23,7 +28,22 @@ Documentation
    custom_scens.rst
    api.rst
 
+Resources
+=========
 
+- For learning the fundamentals of the Python language, a nice introduction can
+  be found in Jake VanderPlas's `A Whirlwind Tour of Python
+  <http://www.oreilly.com/programming/free/files/a-whirlwind-tour-of-python.pdf>`_.
+  The PDF is accompanied by `18 Jupyter notebooks <http://nbviewer.jupyter.org/github/jakevdp/WhirlwindTourOfPython/blob/master/Index.ipynb>`_, with code snippets
+  demonstrating key concepts.
+- For learning how to use ``matplotlib``, the recommended plotting library for
+  use in plotting data produced by ``OSCAR``,  the
+  `tutorial <https://matplotlib.org/users/pyplot_tutorial.html>`_ in
+  ``matplotlib``'s official documentation is a good starting point.
+- Similarly, for an introduction to ``numpy``, the `Quickstart tutorial
+  <https://docs.scipy.org/doc/numpy-dev/user/quickstart.html>`_ in ``numpy``'s
+  official documentation is also helpful.
+  
 See also
 ========
 
