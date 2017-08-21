@@ -2805,6 +2805,25 @@ rsds_alb[np.isnan(rsds_alb)|np.isinf(rsds_alb)] = 0
 # upward transmittance from [Lenton and Vaughan, 2009]
 p_trans = np.array([-0.854], dtype=dty)
 
+# Get biome-average albedos
+biome_mean = np.sum(alpha_alb * AREA_alb[:, np.newaxis], axis=0) / np.sum(AREA_alb)
+
+# Set albedos as specified in oscar constructor
+if alb_global is not None:
+    global_mean = np.mean(biome_mean)
+    alpha_alb = alpha_alb * alb_global / global_mean
+
+for idx, alb in biome_alb.iteritems():
+    if alb is not None:        
+        alpha_alb[:, idx] = alpha_alb[:, idx] * alb / biome_mean[idx]
+
+# Diagnostics
+biome_mean = np.sum(alpha_alb * AREA_alb[:, np.newaxis], axis=0) / np.sum(AREA_alb)
+BIOME_MEAN_ALB = {b: biome_mean[i] for i, b in enumerate(biome)}
+REGION_MEAN_ALB = np.mean(alpha_alb, axis=1)
+REGION_MEAN_ALB = {r: REGION_MEAN_ALB[i] for i, r in enumerate(regionI_name)}
+GLOBAL_MEAN_ALB = np.mean(biome_mean)
+
 # final albedo parameters {{W/m2}/Mha}
 alpha_LCC = p_trans * alpha_alb * rsds_alb[:,np.newaxis] / (510072E9/1E10)
 

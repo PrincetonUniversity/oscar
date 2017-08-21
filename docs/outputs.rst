@@ -127,3 +127,14 @@ Anthropogenic
 
 RFcon : np.array
     Radiative forcing of aviation contrails [W m^-2]
+
+Albedo
+======
+
+global_mean_alb : float
+    Global mean albedo
+biome_mean_alb : dict
+    Dictionary mapping biome names to biome-average albedos
+region_mean_alb : dict
+    Dictionary mapping region names to region-average albedos
+

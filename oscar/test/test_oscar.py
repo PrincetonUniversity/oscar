@@ -98,3 +98,61 @@ def test_bad_scenario_input():
     case = OSCAR(scen_EFF=np.zeros((100, 2)))
     with pytest.raises(ValueError):
         case.run(2100)
+
+
+@pytest.mark.parametrize(
+    'biome',
+    ['alb_des', 'alb_for', 'alb_shr', 'alb_gra', 'alb_cro', 'alb_pas'])
+def test_albedo_error_global_biome_specific(biome):
+    with pytest.raises(ValueError):
+        OSCAR(**{'alb_global': 0.4, biome: 0.1})
+
+
+def test_albedo_error_wFOR_wDES():
+    with pytest.raises(ValueError):
+        OSCAR(mod_biomeSHR='w/FOR',
+              mod_biomeURB='w/DES',
+              alb_for=0.1).run(2100)
+
+
+def test_albedo_error_wFOR_URB():
+    with pytest.raises(ValueError):
+        OSCAR(mod_biomeSHR='w/FOR',
+              mod_biomeURB='URB',
+              alb_for=0.1).run(2100)
+
+
+def test_albedo_error_wGRA_wDES():
+    with pytest.raises(ValueError):
+        OSCAR(mod_biomeSHR='w/GRA',
+              mod_biomeURB='w/DES',
+              alb_gra=0.1).run(2100)
+
+
+def test_albedo_error_wGRA_URB():
+    with pytest.raises(ValueError):
+        OSCAR(mod_biomeSHR='w/GRA',
+              mod_biomeURB='URB',
+              alb_gra=0.1).run(2100)
+
+
+def test_albedo_error_SHR_wDES():
+    result = OSCAR(mod_biomeSHR='SHR',
+                   mod_biomeURB='w/DES',
+                   alb_for=0.1, alb_gra=0.1).run(2100)
+
+
+def test_albedo_error_SHR_URB():
+    result = OSCAR(mod_biomeSHR='SHR',
+                   mod_biomeURB='URB',
+                   alb_for=0.1, alb_gra=0.1).run(2100)
+
+
+def test_set_global_mean_alb():
+    result = OSCAR(alb_global=0.1).run(2100)
+    assert np.abs(result['global_mean_alb'] - 0.1) < 0.0000001
+
+
+def test_set_biome_mean_alb():
+    result = OSCAR(alb_cro=0.1).run(2100)
+    assert np.abs(result['biome_mean_alb']['CRO'] - 0.1) < 0.0000001

@@ -27,6 +27,7 @@ Documentation
    built_in_scens.rst
    custom_scens.rst
    regions.rst
+   albedo.rst
    api.rst
 
 Resources
