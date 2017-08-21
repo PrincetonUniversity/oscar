@@ -278,31 +278,65 @@ if (mod_biomeSHR == 'w/FOR')&(mod_biomeURB == 'w/DES'):
     biome_name = ['Desert & Urban','Forest & Shrubland','Grassland','Cropland','Pasture']
     biome_color = ['','','','','']
     biome_index = {'des':0,'for':1,'shr':1,'gra':2,'cro':3,'pas':4,'urb':0}
+    if ALBEDOS['for'] is not None:
+        raise ValueError('With mod_biomeSHR set to w/FOR, the forest '
+                         'biome takes on the albedo of the shrubland '
+                         'biome.')
+    biome_alb = {0: ALBEDOS['des'], 1: ALBEDOS['shr'], 2: ALBEDOS['gra'],
+                 3: ALBEDOS['cro'], 4: ALBEDOS['pas']}
+    
 elif (mod_biomeSHR == 'w/FOR')&(mod_biomeURB == 'URB'):
     biome = ['DES','FOR+','GRA','CRO','PAS','URB']
     biome_name = ['Desert','Forest & Shrubland','Grassland','Cropland','Pasture','Urban']
     biome_color = ['','','','','','']
     biome_index = {'des':0,'for':1,'shr':1,'gra':2,'cro':3,'pas':4,'urb':5}
+    if ALBEDOS['for'] is not None:
+        raise ValueError('With mod_biomeSHR set to w/FOR, the forest '
+                         'biome takes on the albedo of the shrubland '
+                         'biome.')
+    biome_alb = {0: ALBEDOS['des'], 1: ALBEDOS['shr'], 2: ALBEDOS['gra'],
+                 3: ALBEDOS['cro'], 4: ALBEDOS['pas']}
+    
 elif (mod_biomeSHR == 'w/GRA')&(mod_biomeURB == 'w/DES'):
     biome = ['DES+','FOR','GRA+','CRO','PAS']
     biome_name = ['Desert & Urban','Forest','Grassland & Shrubland','Cropland','Pasture']
     biome_color = ['','','','','']
     biome_index = {'des':0,'for':1,'shr':2,'gra':2,'cro':3,'pas':4,'urb':0}
+    if ALBEDOS['gra'] is not None:
+        raise ValueError('With mod_biomeSHR set to w/GRA, the grassland '
+                         'biome takes on the albedo of the shrubland '
+                         'biome.')
+    biome_alb = {0: ALBEDOS['des'], 1: ALBEDOS['for'], 2: ALBEDOS['shr'],
+                 3: ALBEDOS['cro'], 4: ALBEDOS['pas']}
+
 elif (mod_biomeSHR == 'w/GRA')&(mod_biomeURB == 'URB'):
     biome = ['DES','FOR','GRA+','CRO','PAS','URB']
     biome_name = ['Desert','Forest','Grassland & Shrubland','Cropland','Pasture','Urban']
     biome_color = ['','','','','','']
     biome_index = {'des':0,'for':1,'shr':2,'gra':2,'cro':3,'pas':4,'urb':5}
+    if ALBEDOS['gra'] is not None:
+        raise ValueError('With mod_biomeSHR set to w/GRA, the grassland '
+                         'biome takes on the albedo of the shrubland '
+                         'biome.')
+    biome_alb = {0: ALBEDOS['des'], 1: ALBEDOS['for'], 2: ALBEDOS['shr'],
+                 3: ALBEDOS['cro'], 4: ALBEDOS['pas']}
+    
 elif (mod_biomeSHR == 'SHR')&(mod_biomeURB == 'w/DES'):
     biome = ['DES+','FOR','SHR','GRA','CRO','PAS']
     biome_name = ['Desert & Urban','Forest','Shrubland','Grassland','Cropland','Pasture']
     biome_color = ['','','','','','']
     biome_index = {'des':0,'for':1,'shr':2,'gra':3,'cro':4,'pas':5,'urb':0}
+    biome_alb = {0: ALBEDOS['des'], 1: ALBEDOS['for'], 2: ALBEDOS['shr'],
+                 3: ALBEDOS['gra'], 4: ALBEDOS['cro'], 5: ALBEDOS['pas']}
+    
 elif (mod_biomeSHR == 'SHR')&(mod_biomeURB == 'URB'):
     biome = ['DES','FOR','SHR','GRA','CRO','PAS','URB']
     biome_name = ['Desert','Forest','Shrubland','Grassland','Cropland','Pasture','Urban']
     biome_color = ['','','','','','','']
     biome_index = {'des':0,'for':1,'shr':2,'gra':3,'cro':4,'pas':5,'urb':6}
+    biome_alb = {0: ALBEDOS['des'], 1: ALBEDOS['for'], 2: ALBEDOS['shr'],
+                 3: ALBEDOS['gra'], 4: ALBEDOS['cro'], 5: ALBEDOS['pas']}
+
 else:
     biome = ['all']
     biome_name = biome

@@ -55,7 +55,9 @@ class OSCAR(object):
                  scen_EN2O='stop', scen_Ehalo='stop', scen_ENOX='stop',
                  scen_ECO='stop', scen_EVOC='stop', scen_ESO2='stop',
                  scen_ENH3='stop', scen_EOC='stop', scen_EBC='stop',
-                 scen_RFant='stop', scen_RFnat='stop'):
+                 scen_RFant='stop', scen_RFnat='stop', alb_des=None,
+                 alb_for=None, alb_shr=None, alb_gra=None, alb_cro=None,
+                 alb_pas=None, alb_global=None):
         """Create and configure an instance of OSCAR
 
         Parameters
@@ -182,6 +184,20 @@ class OSCAR(object):
         scen_RFnat : str
             Scenario for natural radiative forcing.  Options are 'stop' and
             'cst'.  Default is 'stop'.
+        alb_des : float
+            Albedo of desert biome (must be between 0 and 1 or None)
+        alb_for : float
+            Albedo of forest biome (must be between 0 and 1 or None)
+        alb_shr : float
+            Albedo of shrubland biome (must be between 0 and 1 or None)
+        alb_gra : float
+            Albedo of grassland biome (must be between 0 and 1 or None)
+        alb_cro : float
+            Albedo of cropland biome (must be between 0 and 1 or None)
+        alb_pas : float
+            Albedo of pasture biome (must be between 0 and 1 or None)
+        alb_global : float
+            Albedo of the globe (must be between 0 and 1 or None)
         """
         self.fT = fT
         self.mod_regionI = mod_regionI
@@ -200,7 +216,24 @@ class OSCAR(object):
         self.data_RFant = data_RFant
         self.data_RFnat = data_RFnat
         self.mod_DATAscen = mod_DATAscen
+        self.mod_biomeSHR = mod_biomeSHR
+        self.mod_biomeURB = mod_biomeURB
         self.scen_ALL = scen_ALL
+
+        # Albedos
+        self.albedos = {
+            'des': alb_des,
+            'for': alb_for,
+            'shr': alb_shr,
+            'gra': alb_gra,
+            'cro': alb_cro,
+            'pas': alb_pas
+        }
+        self.alb_global = alb_global
+        if (alb_global is not None) and not all(alb is None for alb in
+                                                self.albedos.values()):
+            raise ValueError('Cannot set both biome-specific albedos and a '
+                             'global mean albedo in the same simulation.')
 
         if scen_ALL is not None:
             self.scen_EFF = scen_ALL
@@ -295,6 +328,11 @@ class OSCAR(object):
             scen_RFant = self.scen_RFant
             scen_RFnat = self.scen_RFnat
 
+            mod_biomeSHR = self.mod_biomeSHR
+            mod_biomeURB = self.mod_biomeURB
+            ALBEDOS = self.albedos
+            alb_global = self.alb_global
+
             execfile(os.path.join(_PATH, 'OSCAR-loadD.py'), locals())
             execfile(os.path.join(_PATH, 'OSCAR-loadP.py'), locals())
             execfile(os.path.join(_PATH, 'OSCAR-format.py'), locals())
@@ -314,4 +352,7 @@ class OSCAR(object):
             result = locals()['OSCAR_lite'](var_output=var_output)
             output_data = {name: values for name, values in zip(var_output,
                                                                 result)}
+            output_data['biome_mean_alb'] = reference_vars['BIOME_MEAN_ALB']
+            output_data['region_mean_alb'] = reference_vars['REGION_MEAN_ALB']
+            output_data['global_mean_alb'] = reference_vars['GLOBAL_MEAN_ALB']
             return _merge_dicts(input_data, output_data, rf_drivers)

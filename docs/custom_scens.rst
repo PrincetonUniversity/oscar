@@ -25,7 +25,7 @@ atmospheric lifetimes, like aerosols, likely does have a significant impact on
 climate. [#SHI2009]_
 
 Custom emissions can be specified for the following keyword arguments in the
-``OSCAR`` constructor: ``scen_EFF``, ``scen_ECH4``, ``scen_EN2O``, ``scen_SO2``, ``scen_ENH3``,
+``OSCAR`` constructor: ``scen_EFF``, ``scen_ECH4``, ``scen_EN2O``, ``scen_ESO2``, ``scen_ENH3``,
 ``scen_EOC``, ``scen_EBC``, ``scen_ENOX``, ``scen_ECO``, ``scen_EVOC``.
 
 Global method
