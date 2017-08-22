@@ -65,6 +65,38 @@ Ocean heat content
 D_OHC : np.array
     Deviation in ocean heat content [ZJ]
 
+Simulated radiative forcings
+----------------------------
+
+RF_CO2 : np.array
+    Radiative forcing of carbon [W m^-2]
+RF_CH4 : np.array
+    Radiative forcing of methane [W m^-2]
+RF_H2Os : np.array
+    Radiative forcing of stratospheric water vapor [W m^-2]
+RF_N2O : np.array
+    Radiative forcing of nitrous oxide [W m^-2]
+RF_SO4 : np.array
+    Radiative forcing of sulfate aerosols [W m^-2]
+RF_BC : np.array
+    Radiative forcing of black carbon aerosols [W m^-2]
+RF_POA : np.array
+    Radiative forcing of primary organic aerosols [W m^-2]
+RF_cloud : np.array
+    Radiative forcing of aerosol cloud interactions [W m^-2]
+RF_BCsnow : np.array
+    Radiative forcing of black carbon on snow [W m^-2]
+RF_LCC : np.array
+    Radiative forcing of land cover change [W m^-2]
+RF_O3t : np.array
+    Radiative forcing of tropospheric ozone [W m^-2]
+RF_O3s : np.array
+    Radiative forcing of stratospheric ozone [W m^-2]
+RF_NO3 : np.array
+    Radiative forcing of nitrate aerosols [W m^-2]
+RF_SOA : np.array
+    Radiative forcing of secondary organic aerosols [W m^-2]
+    
 Emissions
 =========
 
@@ -107,10 +139,20 @@ EVOC : dict
 ECO : dict
     Carbon monoxide emissions [Mt yr^-1]
 
+Halogenated compounds
+---------------------
+
+EHFC : dict
+    Hydrofluorocarbon emissions [kt yr^-1]
+EPFC : dict
+    Perfluorocarbon emissions [kt yr^-1]
+EODS : dict
+    Ozone-depleting substance emissions [kt yr^-1]
+    
 Radiative forcing drivers
 =========================
 
-Finally, ``OSCAR`` is also driven by inputs of radiative forcings from various
+``OSCAR`` is also driven by inputs of radiative forcings from various
 natural and anthropogenic sources.  One can access the values used in a
 particular simulation by selecting the following variables.
 
@@ -130,6 +172,12 @@ RFcon : np.array
 
 Albedo
 ======
+
+The albedo (percent of incident solar radiation reflected) is an important
+parameter controlling the climate.  The albedo is prescribed in the model; it
+can be adjusted in the ``OSCAR`` constructor (see the `albedo page
+<albedo.html>`_ for more information). These three diagnostics describe the albedo
+used in the model.
 
 global_mean_alb : float
     Global mean albedo
