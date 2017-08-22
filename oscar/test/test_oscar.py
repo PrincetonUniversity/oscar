@@ -47,7 +47,7 @@ def test_oscar(kwargs):
 
 
 # Eventually it would be good to parametrize this to test all constituents
-def test_custom_scenario():
+def test_custom_scenario_EFF():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(ROOT, 'EFossil_RCP/'
                         '#DATA.EFossil_RCP.2000-2100_5reg0.rcp85_EFF.csv')
@@ -56,6 +56,16 @@ def test_custom_scenario():
 
     expected = OSCAR(scen_EFF='RCP8.5').run(2100)['D_gst']
     result = OSCAR(scen_EFF=global_EFF).run(2100)['D_gst']
+    np.testing.assert_allclose(result, expected, atol=1.0e-5)
+
+
+def test_custom_scenario_ECH4():
+    built_in = OSCAR(scen_ECH4='ECH4', mod_DATAscen='raw').run(2100)
+    global_ECH4 = built_in['ECH4']['Total'][300:]
+
+    expected = built_in['D_gst']
+    result = OSCAR(scen_ECH4=global_ECH4,
+                   mod_DATAscen='raw').run(2100)['D_gst']
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
 
 

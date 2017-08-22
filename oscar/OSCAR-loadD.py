@@ -1758,7 +1758,13 @@ if (data_RFnat == 'IPCC-AR5'):
 
 # reference emissions for preindustrial
 for VAR in ['ECH4','EN2O']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']:
-    exec(VAR+'[:,...] -= '+VAR+'_0[np.newaxis,...]')
+    exec('scen = scen_'+VAR)
+    if isinstance(scen, np.ndarray):
+        # [SKC] For future emissions prescribed with an array, there should be no
+        # offset post ind_cdiac
+        exec(VAR+'[:ind_cdiac + 1,...] -= '+VAR+'_0[np.newaxis,...]')
+    else:
+        exec(VAR+'[:,...] -= '+VAR+'_0[np.newaxis,...]')
 
 # force true 1750 preindustrial (drivers)
 if PI_1750:
