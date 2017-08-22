@@ -1,27 +1,38 @@
 import os
 import warnings
 
+import numpy as np
+
 _PATH = os.path.dirname(__file__)
 _DEFAULT_OUTPUT_DIAGNOSTICS = [
     'D_CO2', 'D_CH4', 'D_N2O', 'RF_halo', 'D_O3t',
     'D_O3s', 'D_SO4', 'D_POA', 'D_BC', 'D_NO3',
-    'D_SOA', 'D_AERh', 'RF', 'D_gst', 'D_OHC'
+    'D_SOA', 'D_AERh', 'RF', 'D_gst', 'D_OHC',
+    'RF_CO2', 'RF_CH4', 'RF_H2Os', 'RF_N2O', 'RF_SO4',  # Added by Laure
+    'RF_BC', 'RF_cloud', 'RF_BCsnow', 'RF_LCC',
+    'RF_O3t', 'RF_O3s', 'RF_POA', 'RF_NO3', 'RF_SOA'
 ]
 _SIMPLE_EMISSIONS = [
     'EFF', 'ECH4', 'EN2O', 'ENOX', 'ECO', 'EVOC', 'ESO2', 'ENH3',
     'EOC', 'EBC'
+]
+_COMPLEX_EMISSIONS = [
+    'EHFC', 'EPFC', 'EODS'
 ]
 _RF_DRIVERS = [
     'RFsolar', 'RFvolc', 'RFcon'
 ]
 
 
-def unpack_regions(data, regions):
+def unpack_regions(data, regions, simple=True):
     """Converts a 2D array of columns with regional data to a dictionary
     mapping region names to 1D arrays"""
     result = {}
     for i, region in enumerate(regions):
-        result[region] = data[:, i]
+        if simple:
+            result[region] = data[:, i]
+        else:
+            result[region] = np.sum(data[:, i, :], axis=1)
     return result
 
 
@@ -344,8 +355,15 @@ class OSCAR(object):
             regions[0] = 'Bunker fuels'
             input_data = {name: unpack_regions(reference_vars[name], regions)
                           for name in _SIMPLE_EMISSIONS}
+            input_data_complex = {name: unpack_regions(reference_vars[name],
+                                                       regions, simple=False)
+                                  for name in _COMPLEX_EMISSIONS}
             for name in input_data:
                 input_data[name]['Total'] = sum_dict(input_data[name])
+                
+            for name in input_data_complex:
+                input_data_complex[name]['Total'] = sum_dict(
+                    input_data_complex[name])
 
             rf_drivers = {name: reference_vars[name] for name in _RF_DRIVERS}
 
@@ -355,4 +373,5 @@ class OSCAR(object):
             output_data['biome_mean_alb'] = reference_vars['BIOME_MEAN_ALB']
             output_data['region_mean_alb'] = reference_vars['REGION_MEAN_ALB']
             output_data['global_mean_alb'] = reference_vars['GLOBAL_MEAN_ALB']
-            return _merge_dicts(input_data, output_data, rf_drivers)
+            return _merge_dicts(input_data, output_data, rf_drivers,
+                                input_data_complex)
