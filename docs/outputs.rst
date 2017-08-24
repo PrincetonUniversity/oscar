@@ -6,9 +6,6 @@ Output variables
 comprehensive list of possible outputs.  All variables are given as deviations
 from the start year of the simulation (1700).  
 
-TODO(Spencer): Include all possible outputs from the manual, not just the
-default output diagnostics.
-
 Simulated variables
 ===================
 
