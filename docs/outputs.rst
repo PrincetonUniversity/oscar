@@ -6,9 +6,6 @@ Output variables
 comprehensive list of possible outputs.  All variables are given as deviations
 from the start year of the simulation (1700).  
 
-TODO(Spencer): Include all possible outputs from the manual, not just the
-default output diagnostics.
-
 Simulated variables
 ===================
 
@@ -52,6 +49,16 @@ RF : np.array
     Total radiative forcing of all forcing agents [W m^-2]
 RF_halo : np.array
     Radiative forcing of halogenated compounds [W m^-2]
+
+Precipitation
+-------------
+
+D_gyp : np.array
+    Deviation in global yearly precipitation [mm yr^-1]
+D_lst : dict
+    Dictionary mapping region names to deviations in temperature [K]
+D_lyp : dict
+    Dictionary mapping region names to deviations in precipitation [mm yr^-1]
     
 Temperature
 -----------
@@ -59,9 +66,19 @@ Temperature
 D_gst : np.array
     Deviation in global mean surface temperature [K]
 
-Ocean heat content
-------------------
+Ocean properties
+----------------
 
+D_mld : np.array
+    Deviation in ocean mixed layer depth [m]
+D_dic : np.array
+    Deviation of dissolved inorganic carbon [micro-mol kg^-1]
+D_pH : np.array
+    Deviation of pH of ocean [pH units]
+D_OSNK : np.array
+    Deviation in flux of carbon into ocean [Gt Carbon yr^-1]
+D_sst : np.array
+    Deviation in sea surface temperature [K]
 D_OHC : np.array
     Deviation in ocean heat content [ZJ]
 
@@ -96,6 +113,76 @@ RF_NO3 : np.array
     Radiative forcing of nitrate aerosols [W m^-2]
 RF_SOA : np.array
     Radiative forcing of secondary organic aerosols [W m^-2]
+
+Atmospheric chemistry diagnostics
+---------------------------------
+
+D_OHSNK_CH4 : np.array
+    Deviation in removal flux of methane due to tropospheric oxidation [Mt Carbon yr^-1]
+D_HVSNK_CH4 : np.array
+    Deviation in removal flux of methane due to stratospheric oxidation [Mt Carbon yr^-1]
+D_XSNK_CH4 : np.array
+    Deviation in removal flux of methane due to oxidation in dry soils and the oceanic boundary layer [Mt Carbon yr^-1]
+D_HVSNK_N2O : np.array
+    Deviation in removal flux of nitrous oxide due to stratospheric oxidation [Mt Nitrogen yr^-1]
+D_EESC : np.array
+    Deviation in equivalent effective stratospheric chlorine [ppt]
+D_CH4_lag : np.array
+    Deviation in stratospheric methane concentration [ppb]
+D_N2O_lag : np.array
+    Deviation in stratospheric nitrous oxide concentration [ppb]
+
+Land surface diagnostics
+------------------------
+
+D_AREA : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in area covered [Mha]
+D_npp : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in net primary productivity [Gt Carbon Mha^-1 yr^-1]
+D_efire : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in carbon flux from fires into the atmosphere [Gt Carbon Mha^-1 yr^-1]
+D_fmort : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in flux of carbon into carbon litter pool due to mortality [Gt Carbon Mha^-1 yr^-1]
+D_rh1 : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in heterotrophic respiration rate [Gt Carbon Mha^-1 yr^-1]
+D_fmet : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in flux of carbon into soil organic carbon due to metabolization [Gt Carbon Mha^-1 yr^-1]
+D_rh2 : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in heterotropic respiration in the soil carbon pool [Gt Carbon Mha^-1 yr^-1]
+D_cveg : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in living biomass [Gt Carbon Mha^-1]
+D_csoil1 : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in the carbon litter pool [Gt Carbon Mha^-1]
+D_csoil2 : dict
+    Dictionary mapping region names to dictionaries mapping biome names to deviations in soil carbon pool [Gt Carbon Mha^-1]
+A_WET : dict
+    Dictionary mapping region names to time series arrays of deviation in wetland area [Mha]
+D_EWET : dict
+    Dictionary mapping region names to time series arrays of deviation in wetland carbon emissions [Mt Carbon Mha^-1 yr^-1]
+
+Biomass burning emissions
+-------------------------
+
+D_EBB_CO2 : dict
+    Dictionary mapping region names to time series arrays of deviation of carbon dioxide emissions from biomass burning [Mt Carbon yr^-1]
+D_EBB_CH4 : dict
+    Dictionary mapping region names to time series arrays of deviation of methane emissions from biomass burning [Mt Carbon yr^-1]
+D_EBB_N2O : dict
+    Dictionary mapping region names to time series arrays of deviation of nitrous oxide emissions from biomass burning [Mt Nitrogen yr^-1]
+D_EBB_NOX : dict
+    Dictionary mapping region names to time series arrays of deviation of nitrogen oxide emissions from biomass burning [Mt Nitrogen yr^-1]
+D_EBB_CO : dict
+    Dictionary mapping region names to time series arrays of deviation of carbon monoxide emissions from biomass burning [Mt Carbon yr^-1]
+D_EBB_VOC : dict
+    Dictionary mapping region names to time series arrays of deviation of volatile organic carbon emissions from biomass burning [Mt yr^-1]
+D_EBB_SO2 : dict
+    Dictionary mapping region names to time series arrays of deviation of sulfur dioxide emissions from biomass burning [Mt Sulfur yr^-1]
+D_EBB_NH3 : dict
+    Dictionary mapping region names to time series arrays of deviation of ammonia emissions from biomass burning [Mt Nitrogen yr^-1]
+D_EBB_OC : dict
+    Dictionary mapping region names to time series arrays of deviation of organic carbon aerosol emissions from biomass burning [Mt Carbon yr^-1]
+D_EBB_BC : dict
+    Dictionary mapping region names to time series arrays of deviation of black carbon aerosol emissions from biomass burning [Mt Carbon yr^-1]
     
 Emissions
 =========
@@ -179,10 +266,10 @@ can be adjusted in the ``OSCAR`` constructor (see the `albedo page
 <albedo.html>`_ for more information). These three diagnostics describe the albedo
 used in the model.
 
-global_mean_alb : float
+GLOBAL_MEAN_ALB : float
     Global mean albedo
-biome_mean_alb : dict
+BIOME_MEAN_ALB : dict
     Dictionary mapping biome names to biome-average albedos
-region_mean_alb : dict
+REGION_MEAN_ALB : dict
     Dictionary mapping region names to region-average albedos
 
