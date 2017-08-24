@@ -50,7 +50,7 @@ See also
 - The original source code for the model used in this course is based on `can be found on GitHub <https://github.com/tgasser/OSCAR>`_.
 - The source code was released as a companion to a paper that appeared in
   Geoscientific Model Development in 2017 [#GMD]_
-- ``OSCAR`` has been used a number of scientific publications
+- ``OSCAR`` has been used in a number of scientific publications
   [#ARN2017]_ [#GAS2017]_ [#LI2016]_ [#GAS2015]_
 
 .. [#GMD]
