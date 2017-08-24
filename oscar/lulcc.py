@@ -97,3 +97,6 @@ class LULCCScenario(object):
         if not same:
             raise ValueError('All non-none transition fields must have the '
                              'same shape')
+
+    def __contains__(self, obj):
+        return False
