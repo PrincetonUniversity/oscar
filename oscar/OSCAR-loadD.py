@@ -21,6 +21,7 @@ import csv
 
 import numpy as np
 
+from oscar import LULCCScenario
 from oscar import Projection
 
 print 'LOADING: DRIVERS'
@@ -969,14 +970,25 @@ SHIFTproj = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind,nb_regionI,nb_bio
 # from [Hurtt et al., 2011] and [Meinshausen et al., 2011]
 
 # LUC
-if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
-    for b1 in range(len(bio)):
-        for b2 in range(len(bio)):
-            if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv')):
-                TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv'),'r'))], dtype=dty)
-                for i in range(1,114+1):
-                    LUCproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b1]],biome_index[bio[b2]]] += TMP[:min(ind_final,400)-306+1,i-1]
-
+if not isinstance(scen_LULCC, LULCCScenario):
+    if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
+        for b1 in range(len(bio)):
+            for b2 in range(len(bio)):
+                if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv')):
+                    TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv'),'r'))], dtype=dty)
+                    for i in range(1,114+1):
+                        LUCproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b1]],biome_index[bio[b2]]] += TMP[:min(ind_final,400)-306+1,i-1]
+else:
+    for b1 in bio:
+        for b2 in bio:
+            try:
+                TMP = scen_LULCC.transitions[(b1, b2)]
+                for i in range(1, 114 + 1):
+                    LUCproj[306:min(ind_final, TMP.shape[0]) + 1,
+                            regionJ_index[i], 0, kLUC, regionI_index[i],
+                            biome_index[b1], biome_index[b2]] += TMP[:min(ind_final, TMP.shape[0]) - 306 + 1, i]
+            except KeyError:
+                pass
 # HARV
 if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
     for b in range(len(bio)):
