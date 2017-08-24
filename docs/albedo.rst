@@ -1,6 +1,6 @@
-######
-Albedo
-######
+######################
+Configuring the albedo
+######################
 
 In the real world, the albedo (fraction of incoming solar radiation reflected)
 varies depending on the surface type; the darker the surface, the lower the
@@ -96,12 +96,12 @@ Decreasing the albedo of cropland
 
 Here we will decrease the albedo of cropland to half of its default value and
 see its impact on temperature.  First we'll show what the default albedo of
-cropland is by printing out the ``biome_mean_alb`` diagnostic from the
+cropland is by printing out the ``BIOME_MEAN_ALB`` diagnostic from the
 simulation wtih default parameters:
 
 .. ipython:: python
 
-    print(results_default['biome_mean_alb'])
+    print(results_default['BIOME_MEAN_ALB'])
 
 Next, we'll run a simulation cutting that value in half, and plot the time
 series of global mean temperature deviation:
@@ -109,12 +109,12 @@ series of global mean temperature deviation:
 .. ipython:: python
 
     half_alb_cro = OSCAR(scen_ALL='RCP8.5',
-                         alb_cro=0.5 * results_default['biome_mean_alb']['CRO'])
+                         alb_cro=0.5 * results_default['BIOME_MEAN_ALB']['CRO'])
     results_half_alb_cro = half_alb_cro.run(2100)
     fig, ax = plt.subplots(1, 1)
     ax.plot(time, results_default['D_gst'], label='Default')
     ax.plot(time, results_half_alb_cro['D_gst'],
-            label='Cropland Albedo = {:0.3f}'.format(results_half_alb_cro['biome_mean_alb']['CRO']))
+            label='Cropland Albedo = {:0.3f}'.format(results_half_alb_cro['BIOME_MEAN_ALB']['CRO']))
     ax.legend(loc='lower right')
     ax.set_xlabel('Year')
              

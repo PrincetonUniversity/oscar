@@ -1,17 +1,42 @@
 import os
 import warnings
 
+from functools import partial
+
 import numpy as np
 
 _PATH = os.path.dirname(__file__)
-_DEFAULT_OUTPUT_DIAGNOSTICS = [
-    'D_CO2', 'D_CH4', 'D_N2O', 'RF_halo', 'D_O3t',
-    'D_O3s', 'D_SO4', 'D_POA', 'D_BC', 'D_NO3',
-    'D_SOA', 'D_AERh', 'RF', 'D_gst', 'D_OHC',
-    'RF_CO2', 'RF_CH4', 'RF_H2Os', 'RF_N2O', 'RF_SO4',  # Added by Laure
-    'RF_BC', 'RF_cloud', 'RF_BCsnow', 'RF_LCC',
-    'RF_O3t', 'RF_O3s', 'RF_POA', 'RF_NO3', 'RF_SOA'
+
+# Diagnosed fields (can be passed to the var_output argument of OSCAR_lite)
+_TIME_DIAGNOSTICS = [
+    'D_mld', 'D_dic', 'D_pH', 'OSNK', 'LSNK', 'D_OHSNK_CH4', 'D_HVSNK_CH4',
+    'D_XSNK_CH4', 'D_HVSNK_N2O', 'D_O3t', 'D_EESC', 'D_O3s',
+    'D_SO4', 'D_POA', 'D_BC', 'D_NO3', 'D_SOA', 'D_AERh', 'D_CO2', 'D_CH4',
+    'D_CH4_lag', 'D_N2O', 'D_N2O_lag', 'RF', 'RF_warm', 'RF_atm', 'RF_CO2',
+    'RF_CH4', 'RF_H2Os', 'RF_N2O', 'RF_halo', 'RF_O3t', 'RF_O3s', 'RF_SO4',
+    'RF_POA', 'RF_BC', 'RF_NO3', 'RF_SOA', 'RF_cloud', 'RF_BCsnow', 'RF_LCC',
+    'D_gst', 'D_sst', 'D_gyp', 'D_OHC'
 ]
+_TIME_REGION_BIOME_DIAGNOSTICS = [
+    'D_AREA', 'D_npp', 'D_efire', 'D_fmort', 'D_rh1', 'D_fmet', 'D_rh2',
+    'D_cveg', 'D_csoil1', 'D_csoil2'
+]
+_TIME_REGION_DIAGNOSTICS = [
+    'D_AWET', 'D_EWET', 'D_ewet', 'D_EBB_CO2', 'D_EBB_CH4',
+    'D_EBB_N2O', 'D_EBB_NOX', 'D_EBB_CO', 'D_EBB_VOC', 'D_EBB_SO2',
+    'D_EBB_NH3', 'D_EBB_OC', 'D_EBB_BC', 'D_lst', 'D_lyp'
+]
+_OUTPUT_DIAGNOSTICS = (_TIME_DIAGNOSTICS + _TIME_REGION_DIAGNOSTICS +
+                       _TIME_REGION_BIOME_DIAGNOSTICS)
+_VAR_TYPES = {}
+for var in _TIME_DIAGNOSTICS:
+    _VAR_TYPES[var] = 'time'
+for var in _TIME_REGION_DIAGNOSTICS:
+    _VAR_TYPES[var] = 'time-region'
+for var in _TIME_REGION_BIOME_DIAGNOSTICS:
+    _VAR_TYPES[var] = 'time-region-biome'
+
+# Prescribed fields (need to be extracted from OSCAR-loadD.py)
 _SIMPLE_EMISSIONS = [
     'EFF', 'ECH4', 'EN2O', 'ENOX', 'ECO', 'EVOC', 'ESO2', 'ENH3',
     'EOC', 'EBC'
@@ -22,9 +47,12 @@ _COMPLEX_EMISSIONS = [
 _RF_DRIVERS = [
     'RFsolar', 'RFvolc', 'RFcon'
 ]
+_ALBEDO = [
+    'BIOME_MEAN_ALB', 'REGION_MEAN_ALB', 'GLOBAL_MEAN_ALB'
+]
 
 
-def unpack_regions(data, regions, simple=True):
+def unpack_regions(regions, data, simple=True):
     """Converts a 2D array of columns with regional data to a dictionary
     mapping region names to 1D arrays"""
     result = {}
@@ -33,6 +61,16 @@ def unpack_regions(data, regions, simple=True):
             result[region] = data[:, i]
         else:
             result[region] = np.sum(data[:, i, :], axis=1)
+    return result
+
+
+def unpack_regions_and_biomes(regions, biomes, data):
+    """Converts a 3D array to a nested dictionary mapping region names to
+    dictionaries mapping biome names to 1D time series arrays"""
+    result = {}
+    for i, region in enumerate(regions):
+        result[region] = {biome: data[..., i, j]
+                          for j, biome in enumerate(biomes)}
     return result
 
 
@@ -277,21 +315,18 @@ class OSCAR(object):
             self.scen_RFant = scen_RFant
             self.scen_RFnat = scen_RFnat
 
-    def run(self, end_year, var_output=_DEFAULT_OUTPUT_DIAGNOSTICS):
+    def run(self, end_year):
         """Run model for specified number of years
 
         Parameters
         ----------
         end_year : int
             Final year of simulation [> 1700 (simulation start)]
-        var_output : list
-            List of variable names to output
 
         Returns
         -------
         dict
             A mapping of variable names to 1D timeseries arrays or dictionaries
-            of 1D timeseries arrays
         """
         # Suppress numpy divide by zero warnings
         with warnings.catch_warnings():
@@ -349,29 +384,47 @@ class OSCAR(object):
             execfile(os.path.join(_PATH, 'OSCAR-format.py'), locals())
             execfile(os.path.join(_PATH, 'OSCAR-fct.py'), locals())
 
-            # Based on TPCLIMAT_Vfinal; TODO: add complex emissions
+            # Unpack prescribed variables
             reference_vars = locals().copy()
             regions = locals()['regionI_name']
+            biomes = locals()['biome_name']
             regions[0] = 'Bunker fuels'
-            input_data = {name: unpack_regions(reference_vars[name], regions)
-                          for name in _SIMPLE_EMISSIONS}
-            input_data_complex = {name: unpack_regions(reference_vars[name],
-                                                       regions, simple=False)
-                                  for name in _COMPLEX_EMISSIONS}
+
+            input_data = {
+                name: unpack_regions(regions, reference_vars[name])
+                for name in _SIMPLE_EMISSIONS
+            }
+
+            input_data_complex = {
+                name: unpack_regions(
+                    regions, reference_vars[name], simple=False)
+                for name in _COMPLEX_EMISSIONS
+            }
+
             for name in input_data:
                 input_data[name]['Total'] = sum_dict(input_data[name])
-                
+
             for name in input_data_complex:
                 input_data_complex[name]['Total'] = sum_dict(
                     input_data_complex[name])
 
             rf_drivers = {name: reference_vars[name] for name in _RF_DRIVERS}
+            albedo_vars = {name: reference_vars[name] for name in _ALBEDO}
 
-            result = locals()['OSCAR_lite'](var_output=var_output)
-            output_data = {name: values for name, values in zip(var_output,
-                                                                result)}
-            output_data['biome_mean_alb'] = reference_vars['BIOME_MEAN_ALB']
-            output_data['region_mean_alb'] = reference_vars['REGION_MEAN_ALB']
-            output_data['global_mean_alb'] = reference_vars['GLOBAL_MEAN_ALB']
+            # Unpack diagnostics
+            _POSTPROCESS = {
+                'time': lambda x: x,
+                'time-region': partial(unpack_regions, regions),
+                'time-region-biome': partial(unpack_regions_and_biomes,
+                                             regions, biomes)
+            }
+
+            result = locals()['OSCAR_lite'](var_output=_OUTPUT_DIAGNOSTICS)
+            output_data = {name: values for name, values in
+                           zip(_OUTPUT_DIAGNOSTICS, result)}
+            for var in output_data:
+                f = _POSTPROCESS[_VAR_TYPES[var]]
+                output_data[var] = f(output_data[var])
+
             return _merge_dicts(input_data, output_data, rf_drivers,
-                                input_data_complex)
+                                input_data_complex, albedo_vars)
