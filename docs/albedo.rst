@@ -49,7 +49,7 @@ Increasing the global mean albedo
 
     default = OSCAR(scen_ALL='RCP8.5')
     results_default = default.run(2100)
-    print(results_default['global_mean_alb'])
+    print(results_default['GLOBAL_MEAN_ALB'])
 
 Here we can see that the global mean albedo is about 0.2.  Let's set the global
 mean albedo to 0.5, and observe how this changes the temperature response of
@@ -67,7 +67,7 @@ to be:
 
 .. ipython:: python
 
-    print(results_higher_alb['global_mean_alb'])
+    print(results_higher_alb['GLOBAL_MEAN_ALB'])
 
 Next, we'll plot the time series in global mean temperature deviation for each
 simulation:
