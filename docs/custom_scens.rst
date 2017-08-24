@@ -43,7 +43,7 @@ the results of the run.
 
     from oscar import OSCAR
 
-    rcp85 = OSCAR(scen_EFF='RCP8.5')
+    rcp85 = OSCAR(scen_ALL='RCP8.5')
     rcp85_results = rcp85.run(2100)
     rcp85_EFF = rcp85_results['EFF']['Total']
 
@@ -59,7 +59,14 @@ future emissions (post-2000).
 
 .. ipython:: python
 
-    double_rcp85 = OSCAR(scen_EFF=2. * rcp85_EFF[300:], mod_DATAscen='raw')
+    double_rcp85 = OSCAR(scen_EFF=2. * rcp85_EFF[300:], scen_ECH4='RCP8.5',
+                         scen_EN2O='RCP8.5', scen_ESO2='RCP8.5',
+                         scen_ENH3='RCP8.5', scen_EOC='RCP8.5',
+                         scen_EBC='RCP8.5', scen_Ehalo='RCP8.5',
+                         scen_ENOX='RCP8.5', scen_ECO='RCP8.5',
+                         scen_EVOC='RCP8.5', scen_LULCC='RCP8.5',
+                         scen_RFnat='RCP8.5', scen_RFant='RCP8.5',
+                         mod_DATAscen='raw')
     double_rcp85_results = double_rcp85.run(2100)
 
 Finally, if we plot the results we can see (as expected) that the temperature
