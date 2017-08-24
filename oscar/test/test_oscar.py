@@ -14,7 +14,7 @@ import pandas as pd
 import pytest
 
 import oscar
-from oscar import OSCAR, _DEFAULT_OUTPUT_DIAGNOSTICS
+from oscar import OSCAR, _TIME_DIAGNOSTICS
 
 _TEST_PARAMS = [
         OrderedDict([('data_EFF', 'EDGAR')]),
@@ -28,7 +28,7 @@ _IDS = ['-'.join(params.keys()) for params in _TEST_PARAMS]
 def load_expected_data(end_year, parameter):
     path = 'data/{}-{}.csv'.format(parameter, end_year)
     data = np.loadtxt(path, skiprows=1)
-    variables = _DEFAULT_OUTPUT_DIAGNOSTICS
+    variables = _TIME_DIAGNOSTICS
 
     results = {}
     for j, v in enumerate(variables):
@@ -160,9 +160,9 @@ def test_albedo_error_SHR_URB():
 
 def test_set_global_mean_alb():
     result = OSCAR(alb_global=0.1).run(2100)
-    assert np.abs(result['global_mean_alb'] - 0.1) < 0.0000001
+    assert np.abs(result['GLOBAL_MEAN_ALB'] - 0.1) < 0.0000001
 
 
 def test_set_biome_mean_alb():
     result = OSCAR(alb_cro=0.1).run(2100)
-    assert np.abs(result['biome_mean_alb']['CRO'] - 0.1) < 0.0000001
+    assert np.abs(result['BIOME_MEAN_ALB']['CRO'] - 0.1) < 0.0000001
