@@ -1,5 +1,4 @@
-"""Helper class for managing custom emissions scenarios
-"""
+"""Helper class for managing custom emissions scenarios"""
 import numpy as np
 
 _CDIAC_REGIONS = 115
