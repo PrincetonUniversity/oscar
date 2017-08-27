@@ -1,8 +1,4 @@
 """Helper class for managing custom emissions scenarios
-
-A good test case for this would be trying to reproduce the RCP
-emissions scenarios (from the array interface rather than 
-the built-in interface).
 """
 import numpy as np
 
