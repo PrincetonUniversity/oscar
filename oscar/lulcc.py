@@ -239,3 +239,48 @@ class LULCCScenario(object):
                                  'change scenario.  Problem in biome {}.  Mean '
                                  'residual of {:0.2f}'.format(
                                      biome, mean_residual))
+
+
+class SHIFTScenario(LULCCScenario):
+    pass
+
+
+class HARVScenario(object):
+    def __init__(self, desert=None, forest=None, shrubland=None,
+                 grassland=None, cropland=None, pasture=None, urban=None):
+        self.patterns = {
+            'des': desert,
+            'for': forest,
+            'cro': cropland,
+            'shr': shrubland,
+            'gra': grassland,
+            'pas': pasture,
+            'urb': urban
+        }
+        reference_shape = self._assert_matching_shapes()
+
+    def _assert_matching_shapes(self):
+        """Raise a ValueError if there is a shape mismatch among
+        timeseries arrays
+
+        Returns
+        -------
+        reference_shape : tuple
+            Shape of arrays in transitions dictionary
+        """
+        same = True
+        reference_shape = None
+        for key, value in self.patterns.iteritems():
+            if (value is not None) and (reference_shape is None):
+                reference_shape = value.shape
+            if value is not None:
+                same = (same & (value.shape == reference_shape))
+        if not same:
+            raise ValueError('All non-none transition fields must have the '
+                             'same shape')
+        return reference_shape
+
+    def __contains__(self, obj):
+        """This is so we don't need to change logic that checks if 'RCP' is in  
+        a string specified to the scen_LULCC argument"""
+        return False

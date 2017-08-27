@@ -100,7 +100,8 @@ class OSCAR(object):
                  data_ESO2='EDGAR', data_ENH3='EDGAR', data_EOC='ACCMIP',
                  data_EBC='ACCMIP', data_RFant='IPCC-AR5',
                  data_RFnat='IPCC-AR5', mod_DATAscen='trends', scen_ALL=None,
-                 scen_EFF='stop', scen_LULCC='stop', scen_ECH4='stop',
+                 scen_EFF='stop', scen_LULCC='stop', scen_HARV='stop',
+                 scen_SHIFT='stop', scen_ECH4='stop',
                  scen_EN2O='stop', scen_Ehalo='stop', scen_ENOX='stop',
                  scen_ECO='stop', scen_EVOC='stop', scen_ESO2='stop',
                  scen_ENH3='stop', scen_EOC='stop', scen_EBC='stop',
@@ -179,6 +180,14 @@ class OSCAR(object):
             is 'stop'.
         scen_LULCC : str
             Scenario for land-use and land-cover change.  Options are 'stop',
+            'cst', 'RCP8.5', 'RCP6.0', 'RCP4.5', or 'RCP2.6'.  Default is
+            'stop'.
+        scen_HARV : str
+            Scenario for wood harvest.  Options are 'stop',
+            'cst', 'RCP8.5', 'RCP6.0', 'RCP4.5', or 'RCP2.6'.  Default is
+            'stop'.
+        scen_SHIFT : str
+            Scenario for shifting cultivation.  Options are 'stop',
             'cst', 'RCP8.5', 'RCP6.0', 'RCP4.5', or 'RCP2.6'.  Default is
             'stop'.
         scen_ECH4 : str
@@ -287,6 +296,8 @@ class OSCAR(object):
         if scen_ALL is not None:
             self.scen_EFF = scen_ALL
             self.scen_LULCC = scen_ALL
+            self.scen_HARV = scen_ALL
+            self.scen_SHIFT = scen_ALL
             self.scen_ECH4 = scen_ALL
             self.scen_EN2O = scen_ALL
             self.scen_Ehalo = scen_ALL
@@ -302,6 +313,8 @@ class OSCAR(object):
         else:
             self.scen_EFF = scen_EFF
             self.scen_LULCC = scen_LULCC
+            self.scen_HARV = scen_HARV
+            self.scen_SHIFT = scen_SHIFT
             self.scen_ECH4 = scen_ECH4
             self.scen_EN2O = scen_EN2O
             self.scen_Ehalo = scen_Ehalo
@@ -361,6 +374,8 @@ class OSCAR(object):
             scen_ALL = self.scen_ALL
             scen_EFF = self.scen_EFF
             scen_LULCC = self.scen_LULCC
+            scen_HARV = self.scen_HARV
+            scen_SHIFT = self.scen_SHIFT
             scen_ECH4 = self.scen_ECH4
             scen_EN2O = self.scen_EN2O
             scen_Ehalo = self.scen_Ehalo
