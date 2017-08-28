@@ -26,6 +26,7 @@ Documentation
    custom_scens.rst
    regions.rst
    albedo.rst
+   custom_land_use.rst
    api.rst
 
 Resources
