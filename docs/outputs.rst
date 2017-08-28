@@ -55,8 +55,6 @@ Precipitation
 
 D_gyp : np.array
     Deviation in global yearly precipitation [mm yr^-1]
-D_lst : dict
-    Dictionary mapping region names to deviations in temperature [K]
 D_lyp : dict
     Dictionary mapping region names to deviations in precipitation [mm yr^-1]
     
@@ -65,6 +63,8 @@ Temperature
 
 D_gst : np.array
     Deviation in global mean surface temperature [K]
+D_lst : dict
+    Dictionary mapping region names to deviations in temperature [K]
 
 Ocean properties
 ----------------
