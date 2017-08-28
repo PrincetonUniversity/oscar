@@ -66,6 +66,7 @@ future emissions (post-2000).
                          scen_ENOX='RCP8.5', scen_ECO='RCP8.5',
                          scen_EVOC='RCP8.5', scen_LULCC='RCP8.5',
                          scen_RFnat='RCP8.5', scen_RFant='RCP8.5',
+                         scen_HARV='RCP8.5', scen_SHIFT='RCP8.5',
                          mod_DATAscen='raw')
     double_rcp85_results = double_rcp85.run(2100)
 

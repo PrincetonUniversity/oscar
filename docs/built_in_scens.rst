@@ -101,6 +101,14 @@ scen_LULCC : str
     Scenario for land-use and land-cover change.  Options are ``'stop'``,
     ``'cst'``, ``'RCP8.5'``, ``'RCP6.0'``, ``'RCP4.5'``, or ``'RCP2.6'``.  Default is
     ``'stop'``.
+scen_HARV : str
+    Scenario for wood harvest.  Options are ``'stop'``,
+    ``'cst'``, ``'RCP8.5'``, ``'RCP6.0'``, ``'RCP4.5'``, or ``'RCP2.6'``.  Default is
+    ``'stop'``.
+scen_SHIFT : str
+    Scenario for shifting cultivation.  Options are ``'stop'``,
+    ``'cst'``, ``'RCP8.5'``, ``'RCP6.0'``, ``'RCP4.5'``, or ``'RCP2.6'``.  Default is
+    ``'stop'``.
 scen_RFant : str
     Scenario for other anthropogenic radiative forcing.  Options are
     ``'stop'`` and ``'cst'``.  Default is ``'stop'``.

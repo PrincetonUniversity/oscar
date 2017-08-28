@@ -18,9 +18,11 @@
 
 import os
 import csv
+from itertools import permutations
 
 import numpy as np
 
+from oscar import LULCCScenario, SHIFTScenario, HARVScenario
 from oscar import Projection
 
 print 'LOADING: DRIVERS'
@@ -969,49 +971,85 @@ SHIFTproj = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind,nb_regionI,nb_bio
 # from [Hurtt et al., 2011] and [Meinshausen et al., 2011]
 
 # LUC
-if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
-    for b1 in range(len(bio)):
-        for b2 in range(len(bio)):
-            if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv')):
-                TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv'),'r'))], dtype=dty)
-                for i in range(1,114+1):
-                    LUCproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b1]],biome_index[bio[b2]]] += TMP[:min(ind_final,400)-306+1,i-1]
+if not isinstance(scen_LULCC, LULCCScenario):
+    if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
+        for b1 in range(len(bio)):
+            for b2 in range(len(bio)):
+                if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv')):
+                    TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_LUC_'+bio[b1]+'2'+bio[b2]+'.csv'),'r'))], dtype=dty)
+                    for i in range(1,114+1):
+                        LUCproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b1]],biome_index[bio[b2]]] += TMP[:min(ind_final,400)-306+1,i-1]
+else:
+    for b1, b2 in permutations(bio, 2):
+        TMP = scen_LULCC.transitions[(b1, b2)]
+        if TMP is not None:
+            for i in range(1, 114 + 1):
+                LUCproj[306:min(ind_final, 306 + TMP.shape[0]) + 1,
+                        regionJ_index[i], 0, kLUC, regionI_index[i],
+                        biome_index[b1], biome_index[b2]] += TMP[:min(ind_final, 306 + TMP.shape[0]) - 306 + 1, i]
 
 # HARV
-if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
-    for b in range(len(bio)):
-        if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_HARV_'+bio[b]+'.csv')):
-            TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_HARV_'+bio[b]+'.csv'),'r'))], dtype=dty)
-            for i in range(1,114+1):
-                HARVproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b]]] += TMP[:min(ind_final,400)-306+1,i-1]
-
-# SHIFT
-if (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
-    for b1 in range(len(bio)):
-        for b2 in range(b1,len(bio)):
-            if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_SHIFT_'+bio[b1]+'2'+bio[b2]+'.csv')):
-                TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_LULCC[3]+scen_LULCC[5]+'_SHIFT_'+bio[b1]+'2'+bio[b2]+'.csv'),'r'))], dtype=dty)
+if not isinstance(scen_HARV, HARVScenario):
+    if (scen_HARV[:3] == 'RCP')&(ind_final > ind_cdiac):
+        for b in range(len(bio)):
+            if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_HARV[3]+scen_HARV[5]+'_HARV_'+bio[b]+'.csv')):
+                TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_HARV[3]+scen_HARV[5]+'_HARV_'+bio[b]+'.csv'),'r'))], dtype=dty)
                 for i in range(1,114+1):
-                    SHIFTproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b1]],biome_index[bio[b2]]] += TMP[:min(ind_final,400)-306+1,i-1]    
+                    HARVproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b]]] += TMP[:min(ind_final,400)-306+1,i-1]
+else:
+    for b in bio:
+        TMP = scen_HARV.patterns[b]
+        if TMP is not None:
+            for i in range(1, 114 + 1):
+                HARVproj[306:min(ind_final, 306 + TMP.shape[0]) + 1,
+                         regionJ_index[i], 0, kLUC, regionI_index[i],
+                         biome_index[b]] += TMP[:min(ind_final, 306 + TMP.shape[0]) - 306 + 1, i]
+                    
+# SHIFT
+if not isinstance(scen_SHIFT, SHIFTScenario):
+    if (scen_SHIFT[:3] == 'RCP')&(ind_final > ind_cdiac):
+        for b1 in range(len(bio)):
+            for b2 in range(b1,len(bio)):
+                if os.path.isfile(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_SHIFT[3]+scen_SHIFT[5]+'_SHIFT_'+bio[b1]+'2'+bio[b2]+'.csv')):
+                    TMP = np.array([line for line in csv.reader(open(os.path.join(_PATH, 'data/LandUse_RCP/#DATA.LandUse_RCP_'+mod_LSNKcover+'.2006-2100_114reg1.rcp'+scen_SHIFT[3]+scen_SHIFT[5]+'_SHIFT_'+bio[b1]+'2'+bio[b2]+'.csv'),'r'))], dtype=dty)
+                    for i in range(1,114+1):
+                        SHIFTproj[306:min(ind_final,400)+1,regionJ_index[i],0,kLUC,regionI_index[i],biome_index[bio[b1]],biome_index[bio[b2]]] += TMP[:min(ind_final,400)-306+1,i-1]    
+else:
+    for b1, b2 in permutations(bio, 2):
+        TMP = scen_SHIFT.transitions[(b1, b2)]
+        if TMP is not None:
+            for i in range(1, 114 + 1):
+                SHIFTproj[306:min(ind_final, 306 + TMP.shape[0]) + 1,
+                          regionJ_index[i], 0, kLUC, regionI_index[i],
+                          biome_index[b1], biome_index[b2]] += TMP[:min(ind_final, 306 + TMP.shape[0]) - 306 + 1, i]
 
 # ==================
 # 2.A. FINAL DATASET
 # ==================
 
 # datasets mixed following various criteria
+
 for VAR in ['LUC','HARV','SHIFT']:
 
+    if VAR == 'LUC':
+        scen_VAR = 'LULCC'
+    else:
+        scen_VAR = VAR
+    exec("_stop = (scen_{} == 'stop')".format(scen_VAR))
+    exec("_constant = (scen_{} == 'cst')".format(scen_VAR))
+    exec("_rcp_or_custom = ('RCP' in scen_{0}) | isinstance(scen_{0}, {0}Scenario)".format(scen_VAR))
+            
     # stop emissions
-    if (scen_LULCC == 'stop')&(ind_final > ind_cdiac):
+    if _stop & (ind_final > ind_cdiac):
         exec(VAR+'[ind_cdiac+1:,...] = 0')
 
     # constant emissions
-    elif (scen_LULCC == 'cst')&(ind_final > ind_cdiac):
+    elif _constant & (ind_final > ind_cdiac):
         exec(VAR+'[ind_cdiac+1:,...] = '+VAR+'[ind_cdiac,...][np.newaxis,...]')        
 
     # RCP scenarios
     # always raw discontinuity
-    elif (scen_LULCC[:3] == 'RCP')&(ind_final > ind_cdiac):
+    elif _rcp_or_custom &(ind_final > ind_cdiac):
         exec(VAR+'[ind_cdiac+1:,...] = '+VAR+'proj[ind_cdiac+1:,...]')
 
 # delete individual datasets
