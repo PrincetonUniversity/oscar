@@ -31,9 +31,6 @@ alb_cro : float
 alb_pas : float
     Albedo of pasture biome (must be between 0 and 1 or ``None``, default ``None``)
 
-Examples
-========
-
 To illustrate the impact of prescribing the albedo in the model (as well as the
 albedo diagnostics), we will do two experiments.  In the first, we will simply
 set the global albedo to be substantially greater than the default (which in
@@ -41,7 +38,7 @@ theory should cool the climate).  In the second, we will set the albedo of a
 specific biome.
 
 Increasing the global mean albedo
----------------------------------
+=================================
 
 .. ipython:: python
 
@@ -92,7 +89,7 @@ reflective) decreases the temperature relative to a simulation with the default
 albedo. 
 
 Decreasing the albedo of cropland
----------------------------------
+=================================
 
 Here we will decrease the albedo of cropland to half of its default value and
 see its impact on temperature.  First we'll show what the default albedo of
