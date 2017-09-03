@@ -37,6 +37,12 @@ set the global albedo to be substantially greater than the default (which in
 theory should cool the climate).  In the second, we will set the albedo of a
 specific biome.
 
+.. note::
+
+   All albedo diagnostics represent the initial albedo in the model (i.e. in
+   year 1700).  The global mean albedo changes in time as a result of changes
+   in land use.
+
 Increasing the global mean albedo
 =================================
 

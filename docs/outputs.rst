@@ -155,11 +155,13 @@ D_csoil1 : dict
     Dictionary mapping region names to dictionaries mapping biome names to deviations in the carbon litter pool [Gt Carbon Mha^-1]
 D_csoil2 : dict
     Dictionary mapping region names to dictionaries mapping biome names to deviations in soil carbon pool [Gt Carbon Mha^-1]
-A_WET : dict
+D_AWET : dict
     Dictionary mapping region names to time series arrays of deviation in wetland area [Mha]
-D_EWET : dict
+D_ewet : dict
     Dictionary mapping region names to time series arrays of deviation in wetland carbon emissions [Mt Carbon Mha^-1 yr^-1]
-
+D_EWET : dict
+    Dictionary mapping region names to time series arrays of deviation in wetland carbon emissions [Mt Carbon yr^-1]
+    
 Biomass burning emissions
 -------------------------
 
