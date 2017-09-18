@@ -2,10 +2,32 @@
 Output variables
 ################
 
-``OSCAR`` generates output for a wide range of variables.  This is a
-comprehensive list of possible outputs.  All variables are given as deviations
+``OSCAR`` generates output for a wide range of variables. Most variables are given as deviations
 from the start year of the simulation (1700).  
 
+The variable names listed here can be used as string keys to the dictionary
+returned by running ``OSCAR``.  As an example, we'll plot the deviation in
+temperature from the start of the simulation with the default configuration.
+Here we are using ``'D_gst'`` as a key to the ``results`` dictionary.
+
+.. ipython:: python
+
+   from oscar import OSCAR
+   simulation = OSCAR()
+   results = simulation.run(2100)
+
+   import matplotlib.pyplot as plt
+   fig, ax = plt.subplots(1, 1)
+   time = 1700 + np.arange(len(results['D_gst']))
+   
+   ax.plot(time, results['D_gst'])
+   ax.set_xlabel('Year')
+   
+   @savefig plot_basic_gst2.png width=100%
+   ax.set_ylabel('$\Delta T$ [K]')
+
+A comprehensive list of outputs can be found below.
+   
 Simulated variables
 ===================
 

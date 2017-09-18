@@ -44,7 +44,7 @@ data_ENOX: str
 data_ECO: str
     Dataset for carbon monoxide emissions.  Options are ``'EDGAR'`` or ``'ACCMIP'``.  Default is ``'EDGAR'``.
 data_EVOC: str
-    Dataset for volotile organic compound emissions.  Options are ``'EDGAR'`` or ``'ACCMIP'``.  Default is ``'EDGAR'``.
+    Dataset for volatile organic compound emissions.  Options are ``'EDGAR'`` or ``'ACCMIP'``.  Default is ``'EDGAR'``.
 
 Radiative forcings
 ------------------

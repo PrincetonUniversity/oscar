@@ -120,6 +120,57 @@ scen_RFnat : str
     Scenario for natural radiative forcing.  Options are ``'stop'`` and
     ``'cst'``.  Default is ``'stop'``.
 
+Examples
+========
+
+By default ``OSCAR`` is run without a future emissions scenario.  Running with
+the RCP8.5 emissions scenario for all emissions can be accomplished using the
+``scen_ALL`` keyword argument:
+
+.. ipython:: python
+
+    from oscar import OSCAR
+
+    default = OSCAR()
+    default_results = default.run(2100)
+    
+    rcp85 = OSCAR(scen_ALL='RCP8.5')
+    rcp85_results = rcp85.run(2100)
+
+Let's plot the fossil fuel emissions from each of the simulations to illustrate
+their difference.
+
+.. ipython:: python
+             
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    default_EFF = default_results['EFF']['Total']
+    rcp85_EFF = rcp85_results['EFF']['Total']
+    
+    time = 1700 + np.arange(len(rcp85_EFF))
+
+    fig, ax = plt.subplots(1, 1)
+    ax.plot(time, default_EFF, label='Default EFF')
+    ax.plot(time, rcp85_EFF, label='RCP8.5 EFF')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Fossil Fuel Emissions [Gt yr$^{-1}$]')
+    
+    @savefig plot_default_rcp85_EFF.png width=100%
+    ax.legend(loc='upper left')
+
+Setting scenarios for individual constituents can be done by using the specific
+keyword arguments.  For example:
+
+.. ipython:: python
+
+    example = OSCAR(scen_EFF='RCP8.5', scen_EVOC='RCP8.5')
+
+In the case of the ``example`` above, fossil fuel and volatile organic carbon
+emissions will follow the RCP8.5 scenario, while emissions for other
+constituents (like black carbon aerosols) will not follow any emissions
+scenario (and just stop).
+    
 .. [#RCP]
    Vuuren, D. P. van, Edmonds, J., Kainuma, M., Riahi, K., Thomson, A.,
    Hibbard, K., ... Rose, S. K. (2011). The representative concentration
