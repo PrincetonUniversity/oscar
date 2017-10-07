@@ -438,8 +438,11 @@ class OSCAR(object):
             output_data = {name: values for name, values in
                            zip(_OUTPUT_DIAGNOSTICS, result)}
             for var in output_data:
-                f = _POSTPROCESS[_VAR_TYPES[var]]
+                var_type = _VAR_TYPES[var]
+                f = _POSTPROCESS[var_type]
                 output_data[var] = f(output_data[var])
+                if var_type == 'time-region':
+                    output_data[var]['Total'] = sum_dict(output_data[var])
 
             return _merge_dicts(input_data, output_data, rf_drivers,
                                 input_data_complex, albedo_vars)
