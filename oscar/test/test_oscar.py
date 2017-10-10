@@ -47,6 +47,18 @@ def test_oscar(kwargs):
 
 
 # Eventually it would be good to parametrize this to test all constituents
+def test_custom_scenario_EFF_prescribed():
+    ROOT = os.path.join(oscar.__path__[0], 'data')
+    PATH = os.path.join(ROOT, 'EFossil_RCP/'
+                        '#DATA.EFossil_RCP.2000-2100_5reg0.rcp85_EFF.csv')
+    EFF_projection = np.loadtxt(PATH, delimiter=',', dtype=np.float32)
+    global_EFF = np.sum(EFF_projection, axis=1)
+    emissions = np.linspace(global_EFF[0], global_EFF[0] * 2., 101)
+    result = OSCAR(scen_EFF=emissions,
+                   mod_DATAscen='prescribed').run(2100)['EFF']['Total']
+    np.testing.assert_allclose(result[300:], emissions, atol=1.0e-7)
+
+
 def test_custom_scenario_EFF():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(ROOT, 'EFossil_RCP/'

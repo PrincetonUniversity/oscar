@@ -166,8 +166,8 @@ class OSCAR(object):
             'IPCC-AR5'.  Default is 'IPCC-AR5'.
         mod_DATAscen : str
             How the transition between historical emissions and scenarios is
-            defined.  Options are 'raw', 'offset', 'smoothX' (X in years), or 
-            'trends'.  Default is 'trends'.
+            defined.  Options are 'raw', 'offset', 'smoothX' (X in years),
+            'trends', or 'prescribed'.  Default is 'trends'.
         scen_ALL : None or str
             Option to set the scenario for all emissions.  Options are None,
             'stop', 'cst', 'RCP8.5', 'RCP6.0', 'RCP4.5', 'RCP2.6'.  If None,
