@@ -851,6 +851,9 @@ for VAR in ['FF','CH4','N2O']:
         if (mod_DATAscen == 'raw'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...]')
 
+        elif (mod_DATAscen == 'prescribed'):
+            exec('E'+VAR+'[300:,...] = E'+VAR+'proj[300:,...]')
+            
         # offset at transition point
         elif (mod_DATAscen == 'offset'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...] - E'+VAR+'proj[ind_cdiac,...] + E'+VAR+'[ind_cdiac,...]')
@@ -1257,6 +1260,9 @@ for VAR in ['HFC','PFC','ODS']:
         if (mod_DATAscen == 'raw'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...]')
 
+        elif (mod_DATAscen == 'prescribed'):
+            exec('E'+VAR+'[300:,...] = E'+VAR+'proj[300:,...]')
+            
         # offset at transition point
         elif (mod_DATAscen == 'offset'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...] - E'+VAR+'proj[ind_cdiac,...] + E'+VAR+'[ind_cdiac,...]')
@@ -1676,6 +1682,9 @@ for VAR in ['NOX','CO','VOC']+['SO2','NH3','OC','BC']:
         if (mod_DATAscen == 'raw'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...]')
 
+        elif (mod_DATAscen == 'prescribed'):
+            exec('E'+VAR+'[300:,...] = E'+VAR+'proj[300:,...]')
+            
         # offset at transition point
         elif (mod_DATAscen == 'offset'):
             exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'proj[ind_cdiac+1:,...] - E'+VAR+'proj[ind_cdiac,...] + E'+VAR+'[ind_cdiac,...]')

@@ -28,6 +28,13 @@ Custom emissions can be specified for the following keyword arguments in the
 ``OSCAR`` constructor: ``scen_EFF``, ``scen_ECH4``, ``scen_EN2O``, ``scen_ESO2``, ``scen_ENH3``,
 ``scen_EOC``, ``scen_EBC``, ``scen_ENOX``, ``scen_ECO``, ``scen_EVOC``.
 
+.. note::
+
+   When prescribing emissions, it is highly recommended to use the
+   `mod_DATAscen='prescribed'` setting in the `OSCAR` constructor.  This
+   ensures that emissions are *exactly* as prescribed from year 2000 on for the
+   particular constituent.
+   
 Global method
 =============
 
@@ -53,9 +60,9 @@ specifying a new emissions scenario, the emissions start in the year 2000, but
 the emissions reported from running the model start in the year 1700.
 Therefore we need to slice the emissions array from index 300 onward to select
 just the emissions post year 1999.  In addition, we will set the
-``mod_DATAscen`` keyword to ``'raw'`` to indicate that we do not want any
-smoothing to take place at the boundary between the historical (pre-2000) and
-future emissions (post-2000).
+``mod_DATAscen`` keyword to ``'prescribed'`` to indicate that we do not want
+any smoothing to take place at the boundary between the historical (pre-2000)
+and future emissions (post-2000).
 
 .. ipython:: python
 
@@ -67,7 +74,7 @@ future emissions (post-2000).
                          scen_EVOC='RCP8.5', scen_LULCC='RCP8.5',
                          scen_RFnat='RCP8.5', scen_RFant='RCP8.5',
                          scen_HARV='RCP8.5', scen_SHIFT='RCP8.5',
-                         mod_DATAscen='raw')
+                         mod_DATAscen='prescribed')
     double_rcp85_results = double_rcp85.run(2100)
 
 Finally, if we plot the results we can see (as expected) that the temperature
