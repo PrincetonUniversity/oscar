@@ -1808,8 +1808,12 @@ for VAR in ['ECH4','EN2O']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']:
     exec('scen = scen_'+VAR)
     if isinstance(scen, np.ndarray):
         # [SKC] For future emissions prescribed with an array, there should be no
-        # offset post ind_cdiac
-        exec(VAR+'[:ind_cdiac + 1,...] -= '+VAR+'_0[np.newaxis,...]')
+        # offset post ind_cdiac; if prescribed emissions are used one should
+        # not change emissions post year 2000.
+        if mod_DATAscen == 'prescribed':
+            exec(VAR+'[:300,...] -= '+VAR+'_0[np.newaxis,...]')
+        else:
+            exec(VAR+'[:ind_cdiac + 1,...] -= '+VAR+'_0[np.newaxis,...]')
     else:
         exec(VAR+'[:,...] -= '+VAR+'_0[np.newaxis,...]')
 
