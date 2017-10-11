@@ -47,6 +47,13 @@ def test_oscar(kwargs):
 
 
 # Eventually it would be good to parametrize this to test all constituents
+def test_custom_scenario_ECH4_prescribed():
+    emissions = np.linspace(250.0, 250.0 * 2., 101)
+    result = OSCAR(scen_ECH4=emissions,
+                   mod_DATAscen='prescribed').run(2100)['ECH4']['Total']
+    np.testing.assert_allclose(result[300:], emissions, atol=1.0e-7)
+
+
 def test_custom_scenario_EFF_prescribed():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(ROOT, 'EFossil_RCP/'

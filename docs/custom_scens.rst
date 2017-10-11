@@ -31,7 +31,7 @@ Custom emissions can be specified for the following keyword arguments in the
 .. note::
 
    When prescribing emissions, it is highly recommended to use the
-   `mod_DATAscen='prescribed'` setting in the `OSCAR` constructor.  This
+   ``mod_DATAscen='prescribed'`` setting in the ``OSCAR`` constructor.  This
    ensures that emissions are *exactly* as prescribed from year 2000 on for the
    particular constituent.
    
