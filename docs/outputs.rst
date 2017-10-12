@@ -64,14 +64,6 @@ D_SOA : np.array
 D_AERh : np.array
     Deviation of burden of all soluble aerosols [Tg]
 
-Radiative forcings
-------------------
-
-RF : np.array
-    Total radiative forcing of all forcing agents [W m^-2]
-RF_halo : np.array
-    Radiative forcing of halogenated compounds [W m^-2]
-
 Precipitation
 -------------
 
@@ -97,7 +89,7 @@ D_dic : np.array
     Deviation of dissolved inorganic carbon [micro-mol kg^-1]
 D_pH : np.array
     Deviation of pH of ocean [pH units]
-D_OSNK : np.array
+OSNK : np.array
     Deviation in flux of carbon into ocean [Gt Carbon yr^-1]
 D_sst : np.array
     Deviation in sea surface temperature [K]
@@ -107,6 +99,8 @@ D_OHC : np.array
 Simulated radiative forcings
 ----------------------------
 
+RF : np.array
+    Total radiative forcing of all forcing agents [W m^-2]
 RF_CO2 : np.array
     Radiative forcing of carbon [W m^-2]
 RF_CH4 : np.array
@@ -135,7 +129,9 @@ RF_NO3 : np.array
     Radiative forcing of nitrate aerosols [W m^-2]
 RF_SOA : np.array
     Radiative forcing of secondary organic aerosols [W m^-2]
-
+RF_halo : np.array
+    Radiative forcing of halogenated compounds [W m^-2]
+    
 Atmospheric chemistry diagnostics
 ---------------------------------
 
@@ -207,7 +203,9 @@ D_EBB_OC : dict
     Dictionary mapping region names to time series arrays of deviation of organic carbon aerosol emissions from biomass burning [Mt Carbon yr^-1]
 D_EBB_BC : dict
     Dictionary mapping region names to time series arrays of deviation of black carbon aerosol emissions from biomass burning [Mt Carbon yr^-1]
-    
+LSNK : np.array
+    Deviation in flux of carbon into land carbon stores [Gt Carbon yr^-1]
+
 Emissions
 =========
 
