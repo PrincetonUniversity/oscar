@@ -15,7 +15,7 @@ _TIME_DIAGNOSTICS = [
     'D_CH4_lag', 'D_N2O', 'D_N2O_lag', 'RF', 'RF_warm', 'RF_atm', 'RF_CO2',
     'RF_CH4', 'RF_H2Os', 'RF_N2O', 'RF_halo', 'RF_O3t', 'RF_O3s', 'RF_SO4',
     'RF_POA', 'RF_BC', 'RF_NO3', 'RF_SOA', 'RF_cloud', 'RF_BCsnow', 'RF_LCC',
-    'D_gst', 'D_sst', 'D_gyp', 'D_OHC'
+    'D_gst', 'D_sst', 'D_gyp', 'D_OHC', 'D_gst0'
 ]
 _TIME_REGION_BIOME_DIAGNOSTICS = [
     'D_AREA', 'D_npp', 'D_efire', 'D_fmort', 'D_rh1', 'D_fmet', 'D_rh2',

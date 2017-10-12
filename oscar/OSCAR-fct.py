@@ -66,7 +66,7 @@ def OSCAR_lite(p=p,fT=fT,\
         or var in ['D_O3t','D_EESC','D_O3s','D_SO4','D_POA','D_BC','D_NO3','D_SOA','D_AERh']\
         or var in ['D_CO2','D_CH4','D_CH4_lag','D_N2O','D_N2O_lag']\
         or var in ['RF','RF_warm','RF_atm','RF_CO2','RF_CH4','RF_H2Os','RF_N2O','RF_halo','RF_O3t','RF_O3s','RF_SO4','RF_POA','RF_BC','RF_NO3','RF_SOA','RF_cloud','RF_BCsnow','RF_LCC']\
-        or var in ['D_gst','D_sst','D_gyp','D_OHC']:
+        or var in ['D_gst','D_sst','D_gyp','D_OHC', 'D_gst0']:
             exec(var+'_t = np.zeros([ind_final+1],dtype=dty)')
         # (region) variables
         if var in ['ELUC','D_AWET','D_EWET','D_ewet','D_EBB_CO2','D_EBB_CH4','D_EBB_N2O','D_EBB_NOX','D_EBB_CO','D_EBB_VOC','D_EBB_SO2','D_EBB_NH3','D_EBB_OC','D_EBB_BC','D_lst','D_lyp']:

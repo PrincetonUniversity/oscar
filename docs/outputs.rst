@@ -95,6 +95,8 @@ D_sst : np.array
     Deviation in sea surface temperature [K]
 D_OHC : np.array
     Deviation in ocean heat content [ZJ]
+D_gst0 : np.array
+    Deviation in global mean temperature of the deep ocean [K]
 
 Simulated radiative forcings
 ----------------------------
