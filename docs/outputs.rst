@@ -97,7 +97,7 @@ D_dic : np.array
     Deviation of dissolved inorganic carbon [micro-mol kg^-1]
 D_pH : np.array
     Deviation of pH of ocean [pH units]
-D_OSNK : np.array
+OSNK : np.array
     Deviation in flux of carbon into ocean [Gt Carbon yr^-1]
 D_sst : np.array
     Deviation in sea surface temperature [K]
@@ -207,7 +207,9 @@ D_EBB_OC : dict
     Dictionary mapping region names to time series arrays of deviation of organic carbon aerosol emissions from biomass burning [Mt Carbon yr^-1]
 D_EBB_BC : dict
     Dictionary mapping region names to time series arrays of deviation of black carbon aerosol emissions from biomass burning [Mt Carbon yr^-1]
-    
+LSNK : np.array
+    Deviation in flux of carbon into land carbon stores [Gt Carbon yr^-1]
+
 Emissions
 =========
 
