@@ -246,8 +246,8 @@ elif (mod_kindRF == 'two'):
     kind_color += ['','']
     kGE = kRF+2
 elif (mod_kindRF == 'all'):
-    kind       += ['RFcon','RFsol','RFvol']
-    kind_name  += ['Contrails RF','Solar RF','Volcanoes RF']
+    kind       += ['RFcon','RFsol','RFvol', 'RFprescribed']
+    kind_name  += ['Contrails RF','Solar RF','Volcanoes RF', 'Prescribed RF']
     kind_color += ['','','']
     kGE = kRF+3    
 else:
@@ -255,11 +255,11 @@ else:
     kGE = max(kFF,kLUC,kGHG,kCHI,kAER)+1
 
 if (mod_kindRF == 'all'):
-    kindRF_index = {'RFcon':kRF,'RFsol':kRF+1,'RFvol':kRF+2}
+    kindRF_index = {'RFcon':kRF,'RFsol':kRF+1,'RFvol':kRF+2, 'RFprescribed': kRF}
 elif (mod_kindRF == 'two'):
-    kindRF_index = {'RFcon':kRF,'RFsol':kRF+1,'RFvol':kRF+1}
+    kindRF_index = {'RFcon':kRF,'RFsol':kRF+1,'RFvol':kRF+1, 'RFprescribed': kRF}
 else:
-    kindRF_index = {'RFcon':kRF,'RFsol':kRF,'RFvol':kRF}
+    kindRF_index = {'RFcon':kRF,'RFsol':kRF,'RFvol':kRF, 'RFprescribed': kRF}
 
 # geoengineering
 if (mod_kindGE == 'PUP'):
@@ -1751,6 +1751,7 @@ for VAR in ['PM10']:
 RFcon = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind], dtype=dty) # {W/m2}
 RFvolc = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind], dtype=dty) # {W/m2}
 RFsolar = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind], dtype=dty) # {W/m2}
+RFprescribed = np.zeros([ind_final+1,nb_regionJ,nb_sector,nb_kind], dtype=dty) # {W/m2}
 
 # ==================
 # 5.1. Anthropogenic
@@ -1794,7 +1795,12 @@ if (data_RFnat == 'IPCC-AR5'):
             elif (lgd[x] == 'Solar'):
                 RFsolar[ind_cdiac+1:,0,0,kindRF_index['RFsol']] = np.mean(TMP[-11:,x])
 
-
+# Prescribed radiative forcing (post-2000 only)
+if isinstance(scen_RF, np.ndarray):
+    end_idx = 300 + scen_RF.shape[0]
+    end_idx_scen = min(ind_final + 1, end_idx) - 300
+    RFprescribed[300:min(ind_final + 1, end_idx), 0, 0, kindRF_index['RFprescribed']] = scen_RF[:end_idx_scen]
+                
 ##################################################
 #   B. FINAL DRIVERS
 ##################################################
@@ -1819,7 +1825,7 @@ for VAR in ['ECH4','EN2O']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']:
 
 # force true 1750 preindustrial (drivers)
 if PI_1750:
-    for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar']:
+    for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar','RFprescribed']:
         exec(VAR+'[:50+1] *= 0')
 
 # ================
@@ -1827,13 +1833,13 @@ if PI_1750:
 # ================
 
 # starting year of regional attribution
-for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar']:
+for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar','RFprescribed']:
     exec(VAR+'[:ind_attrib,0,:,:,...] = np.sum('+VAR+'[:ind_attrib,:,:,:,...],1)')
     exec(VAR+'[:ind_attrib,1:,:,:,...] = 0')
 
 # timeframed sectoral attribution
 if (mod_sector == 'Time')&(300 < ind_final <= 310):
-    for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar']:
+    for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar','RFprescribed']:
         exec(VAR+'[150:200,:,:,1,:,...] = '+VAR+'[150:200,:,:,0,:,...]')
         exec(VAR+'[200:210,:,:,2,:,...] = '+VAR+'[200:210,:,:,0,:,...]')
         exec(VAR+'[210:220,:,:,3,:,...] = '+VAR+'[210:220,:,:,0,:,...]')
@@ -1856,7 +1862,7 @@ if (mod_sector == 'Time')&(300 < ind_final <= 310):
             exec(VAR+'[t,:,:,19+t-300,:,...] = '+VAR+'[t,:,:,0,:,...]')
         exec(VAR+'[150:,:,:,0,:,...] = 0')
 elif (mod_sector == 'TimeRCP')&(ind_final == 400):
-    for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar']:
+    for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar','RFprescribed']:
         exec(VAR+'[311:316,:,1,:,...] = '+VAR+'[311:316,:,0,:,...]')
         exec(VAR+'[316:321,:,2,:,...] = '+VAR+'[316:321,:,0,:,...]')
         exec(VAR+'[321:326,:,3,:,...] = '+VAR+'[321:326,:,0,:,...]')

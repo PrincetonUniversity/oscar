@@ -32,7 +32,7 @@ def OSCAR_lite(p=p,fT=fT,\
                LUC=LUC,HARV=HARV,SHIFT=SHIFT,\
                EHFC=EHFC,EPFC=EPFC,EODS=EODS,\
                ENOX=ENOX,ECO=ECO,EVOC=EVOC,ESO2=ESO2,ENH3=ENH3,EOC=EOC,EBC=EBC,\
-               RFcon=RFcon,RFvolc=RFvolc,RFsolar=RFsolar,
+               RFcon=RFcon,RFvolc=RFvolc,RFsolar=RFsolar,RFprescribed=RFprescribed,
                force_CO2=False,force_GHG=False,force_halo=False,force_RF=False,force_RFs=False,force_clim=False,\
                var_output=['ELUC','OSNK','LSNK','D_CO2','RF','D_gst'],\
                plot=[]):
@@ -305,8 +305,14 @@ def OSCAR_lite(p=p,fT=fT,\
                     exec('RF_'+VAR+' = RF_'+VAR+'_force[t]')
 
             # totals
-            RF = RF_CO2 + RF_CH4 + RF_H2Os + RF_N2O + RF_halo + RF_O3t + RF_O3s + RF_SO4 + RF_POA + RF_BC + RF_NO3 + RF_SOA + RF_DUST + RF_SALT + RF_cloud + RF_BCsnow + RF_LCC + RFcon[t] + RFvolc[t] + RFsolar[t]
-            RF_warm = RF_CO2 + RF_CH4 + RF_H2Os + RF_N2O + RF_halo + RF_O3t + RF_O3s + RF_SO4 + RF_POA + RF_BC + RF_NO3 + RF_SOA + RF_DUST + RF_SALT + RF_cloud + warmeff_BCsnow*RF_BCsnow + warmeff_LCC*RF_LCC + RFcon[t] + warmeff_volc*RFvolc[t] + RFsolar[t]
+            RF = (RF_CO2 + RF_CH4 + RF_H2Os + RF_N2O + RF_halo + RF_O3t +
+                  RF_O3s + RF_SO4 + RF_POA + RF_BC + RF_NO3 + RF_SOA + RF_DUST +
+                  RF_SALT + RF_cloud + RF_BCsnow + RF_LCC + RFcon[t] + RFvolc[t] +
+                  RFsolar[t] + RFprescribed[t])
+            RF_warm = (RF_CO2 + RF_CH4 + RF_H2Os + RF_N2O + RF_halo + RF_O3t +
+                       RF_O3s + RF_SO4 + RF_POA + RF_BC + RF_NO3 + RF_SOA + RF_DUST +
+                       RF_SALT + RF_cloud + warmeff_BCsnow*RF_BCsnow + warmeff_LCC*RF_LCC
+                       + RFcon[t] + warmeff_volc*RFvolc[t] + RFsolar[t] + RFprescribed[t])
             RF_atm = p_atm_CO2*RF_CO2 + p_atm_noCO2*(RF_CH4+RF_N2O+RF_halo) + p_atm_O3t*RF_O3t + p_atm_strat*(RF_O3s+RF_H2Os) + p_atm_scatter*(RF_SO4+RF_POA+RF_NO3+RF_SOA+RF_DUST+RF_SALT+RFvolc[t]) + p_atm_absorb*RF_BC + p_atm_cloud*(RF_cloud+RFcon[t]) + p_atm_alb*(RF_BCsnow+RF_LCC) + p_atm_solar*RFsolar[t]
 
             # FORCE
