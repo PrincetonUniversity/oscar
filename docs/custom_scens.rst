@@ -34,6 +34,15 @@ Custom emissions can be specified for the following keyword arguments in the
    ``mod_DATAscen='prescribed'`` setting in the ``OSCAR`` constructor.  This
    ensures that emissions are *exactly* as prescribed from year 2000 on for the
    particular constituent.
+
+.. note::
+
+   Outside of emissions, one can also prescribe a custom radiative forcing from
+   year 2000 forward by using the ``scen_RF`` argument; by default this takes
+   the value of ``None`` (therefore is all zeros throughout the simulation).
+   If one provides a 1D array, ``OSCAR`` will use this time series starting in
+   year 2000.  This prescribed radiative forcing is output as
+   ``'RFprescribed'`` in the output dictionary.
    
 Global method
 =============

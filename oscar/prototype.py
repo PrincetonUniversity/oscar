@@ -45,7 +45,7 @@ _COMPLEX_EMISSIONS = [
     'EHFC', 'EPFC', 'EODS'
 ]
 _RF_DRIVERS = [
-    'RFsolar', 'RFvolc', 'RFcon'
+    'RFsolar', 'RFvolc', 'RFcon', 'RFprescribed'
 ]
 _ALBEDO = [
     'BIOME_MEAN_ALB', 'REGION_MEAN_ALB', 'GLOBAL_MEAN_ALB'
@@ -105,9 +105,9 @@ class OSCAR(object):
                  scen_EN2O='stop', scen_Ehalo='stop', scen_ENOX='stop',
                  scen_ECO='stop', scen_EVOC='stop', scen_ESO2='stop',
                  scen_ENH3='stop', scen_EOC='stop', scen_EBC='stop',
-                 scen_RFant='stop', scen_RFnat='stop', alb_des=None,
-                 alb_for=None, alb_shr=None, alb_gra=None, alb_cro=None,
-                 alb_pas=None, alb_global=None):
+                 scen_RFant='stop', scen_RFnat='stop', scen_RF=None,
+                 alb_des=None, alb_for=None, alb_shr=None, alb_gra=None,
+                 alb_cro=None, alb_pas=None, alb_global=None):
         """Create and configure an instance of OSCAR
 
         Parameters
@@ -242,6 +242,10 @@ class OSCAR(object):
         scen_RFnat : str
             Scenario for natural radiative forcing.  Options are 'stop' and
             'cst'.  Default is 'stop'.
+        scen_RF : np.ndarray or None
+            Scenario for prescribed radiative forcing.  Must be a np.ndarray or
+            None.  Prescribed radiative forcing starts in year 2000.
+            'cst'.  Default is None.
         alb_des : float
             Albedo of desert biome (must be between 0 and 1 or None)
         alb_for : float
@@ -327,6 +331,7 @@ class OSCAR(object):
             self.scen_EBC = scen_EBC
             self.scen_RFant = scen_RFant
             self.scen_RFnat = scen_RFnat
+            self.scen_RF = scen_RF
 
     def run(self, end_year):
         """Run model for specified number of years
@@ -388,6 +393,7 @@ class OSCAR(object):
             scen_EBC = self.scen_EBC
             scen_RFant = self.scen_RFant
             scen_RFnat = self.scen_RFnat
+            scen_RF = self.scen_RF
 
             mod_biomeSHR = self.mod_biomeSHR
             mod_biomeURB = self.mod_biomeURB

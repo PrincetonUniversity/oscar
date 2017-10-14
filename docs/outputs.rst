@@ -281,6 +281,12 @@ Anthropogenic
 RFcon : np.array
     Radiative forcing of aviation contrails [W m^-2]
 
+Prescribed
+----------
+
+RFprescribed : np.array
+    Prescribed radiative forcing via ``scen_RF`` argument [W m^-2]
+    
 Albedo
 ======
 

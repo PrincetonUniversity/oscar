@@ -14,7 +14,18 @@ import pandas as pd
 import pytest
 
 import oscar
-from oscar import OSCAR, _TIME_DIAGNOSTICS
+from oscar import OSCAR
+
+
+_TIME_DIAGNOSTICS = [
+    'D_mld', 'D_dic', 'D_pH', 'OSNK', 'LSNK', 'D_OHSNK_CH4', 'D_HVSNK_CH4',
+    'D_XSNK_CH4', 'D_HVSNK_N2O', 'D_O3t', 'D_EESC', 'D_O3s',
+    'D_SO4', 'D_POA', 'D_BC', 'D_NO3', 'D_SOA', 'D_AERh', 'D_CO2', 'D_CH4',
+    'D_CH4_lag', 'D_N2O', 'D_N2O_lag', 'RF', 'RF_warm', 'RF_atm', 'RF_CO2',
+    'RF_CH4', 'RF_H2Os', 'RF_N2O', 'RF_halo', 'RF_O3t', 'RF_O3s', 'RF_SO4',
+    'RF_POA', 'RF_BC', 'RF_NO3', 'RF_SOA', 'RF_cloud', 'RF_BCsnow', 'RF_LCC',
+    'D_gst', 'D_sst', 'D_gyp', 'D_OHC'
+]
 
 _TEST_PARAMS = [
         OrderedDict([('data_EFF', 'EDGAR')]),
@@ -23,6 +34,12 @@ _TEST_PARAMS = [
                      ('mod_regionI', 'Kyoto')])
 ]
 _IDS = ['-'.join(params.keys()) for params in _TEST_PARAMS]
+
+
+def test_scen_rf():
+    forcing = np.linspace(-1., 2., 101)
+    result = OSCAR(scen_RF=forcing).run(2100)['RFprescribed'][300:]
+    np.testing.assert_allclose(result, forcing)
 
 
 def load_expected_data(end_year, parameter):

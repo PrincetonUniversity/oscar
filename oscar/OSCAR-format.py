@@ -26,7 +26,7 @@ print 'FORMATING'
 
 # remove attribution axis
 # drivers
-for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar']:
+for VAR in ['EFF','ECH4','EN2O']+['LUC','HARV','SHIFT']+['EHFC','EPFC','EODS']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']+['RFcon','RFvolc','RFsolar','RFprescribed']:
     exec(VAR+' = np.sum(np.sum(np.sum('+VAR+',3),2),1)')
 # parameters
 for VAR in ['ECH4','EN2O']+['ENOX','ECO','EVOC','ESO2','ENH3','EOC','EBC']:
