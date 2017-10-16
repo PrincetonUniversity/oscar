@@ -314,6 +314,7 @@ class OSCAR(object):
             self.scen_EBC = scen_ALL
             self.scen_RFant = scen_ALL
             self.scen_RFnat = scen_ALL
+            self.scen_RF = scen_RF
         else:
             self.scen_EFF = scen_EFF
             self.scen_LULCC = scen_LULCC
