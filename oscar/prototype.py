@@ -79,6 +79,16 @@ def sum_dict(data):
     return sum([values for key, values in data.items()])
 
 
+def sum_over_regions_per_biome(data):
+    """Sums over the regions to create a total region for each biome"""
+    regions = data.keys()
+    total = {}
+    for biome in data[regions[0]]:
+        total[biome] = sum([data[region][biome] for region in regions])
+    data['Total'] = total
+    return data
+
+
 def _merge_dicts(*dict_args):
     """Merge the given dictionaries into single dict.
     Given any number of dicts, shallow copy and merge into a new dict,
@@ -450,6 +460,9 @@ class OSCAR(object):
                 output_data[var] = f(output_data[var])
                 if var_type == 'time-region':
                     output_data[var]['Total'] = sum_dict(output_data[var])
+                if var == 'D_AREA':
+                    output_data[var] = sum_over_regions_per_biome(
+                        output_data[var])
 
             return _merge_dicts(input_data, output_data, rf_drivers,
                                 input_data_complex, albedo_vars)
