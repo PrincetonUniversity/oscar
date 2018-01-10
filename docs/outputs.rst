@@ -182,7 +182,8 @@ D_ewet : dict
 D_EWET : dict
     Dictionary mapping region names to time series arrays of deviation in wetland carbon emissions [Mt Carbon yr^-1]
 ELUC : dict
-    Dictionary mapping region names to carbon emissions associated with land use change [Gt C yr^-1]
+    Dictionary mapping region names to carbon emissions associated with land
+use change [Gt C yr^-1] 
 
 Biomass burning emissions
 -------------------------

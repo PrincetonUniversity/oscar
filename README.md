@@ -1,5 +1,27 @@
 # OSCAR
-compact Earth system model
+The compact Earth system model used in teaching ENV367.
+
+**Installation**
+
+One can install `OSCAR` by cloning the repository and installing via `pip`:
+```
+$ git clone https://github.com/PrincetonUniversity/oscar.git
+$ cd oscar
+$ pip install -e .
+```
+
+**Running the test suite**
+
+To make sure the installation went properly, run the test suite in the command
+line.  Note this requires the `pytest` utility, which one can install via:
+```
+$ conda install -c conda-forge pytest
+```
+To run the test suite from the root `oscar` directory, run:
+```
+$ pytest -vv oscar
+```
+If all the tests pass, then things should be all set!
 
 **Reference**:
 
