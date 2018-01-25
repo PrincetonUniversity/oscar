@@ -29,6 +29,6 @@ setuptools.setup(
         'numpy >= 1.7',
         'scipy >= 0.16'
     ],
-    package_data={'oscar': ['data/*']},
+    package_data={'oscar': ['data/**']},
     scripts=['oscar/examples/Examples.ipynb']
 )

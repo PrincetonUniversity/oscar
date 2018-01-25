@@ -3,5 +3,6 @@ dependencies:
   - python=2.7
   - matplotlib
   - numpy
+  - pandas
   - pytest
   - scipy
