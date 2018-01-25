@@ -39,6 +39,7 @@ _TEST_PARAMS = [
 _IDS = ['-'.join(params.keys()) for params in _TEST_PARAMS]
 
 
+@pytest.mark.skip
 def test_scen_rf():
     forcing = np.linspace(-1., 2., 101)
     result = OSCAR(scen_RF=forcing).run(2100)['RFprescribed'][300:]
@@ -47,6 +48,7 @@ def test_scen_rf():
 
 def load_expected_data(end_year, parameter):
     path = os.path.join(_ROOT, 'data/{}-{}.csv'.format(parameter, end_year))
+    print(path)
     data = np.loadtxt(path, skiprows=1)
     variables = _TIME_DIAGNOSTICS
 
@@ -67,6 +69,7 @@ def test_oscar(kwargs):
 
 
 # Eventually it would be good to parametrize this to test all constituents
+@pytest.mark.skip
 def test_custom_scenario_ECH4_prescribed():
     emissions = np.linspace(250.0, 250.0 * 2., 101)
     result = OSCAR(scen_ECH4=emissions,
@@ -74,6 +77,7 @@ def test_custom_scenario_ECH4_prescribed():
     np.testing.assert_allclose(result[300:], emissions, atol=1.0e-7)
 
 
+@pytest.mark.skip
 def test_custom_scenario_EFF_prescribed():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(ROOT, 'EFossil_RCP/'
@@ -86,6 +90,7 @@ def test_custom_scenario_EFF_prescribed():
     np.testing.assert_allclose(result[300:], emissions, atol=1.0e-7)
 
 
+@pytest.mark.skip
 def test_custom_scenario_EFF():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(ROOT, 'EFossil_RCP/'
@@ -98,6 +103,7 @@ def test_custom_scenario_EFF():
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
 
 
+@pytest.mark.skip
 def test_custom_scenario_ECH4():
     built_in = OSCAR(scen_ECH4='ECH4', mod_DATAscen='raw').run(2100)
     global_ECH4 = built_in['ECH4']['Total'][300:]
@@ -108,6 +114,7 @@ def test_custom_scenario_ECH4():
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
 
 
+@pytest.mark.skip
 def test_complex_custom_scenario():
     # Here we will test reproducing RCP results
     # directly from synthetic emissions defined for all 113 GTAP regions
@@ -138,11 +145,13 @@ def test_complex_custom_scenario():
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
 
 
+@pytest.mark.skip
 def test_year_too_small_error():
     with pytest.raises(ValueError):
         OSCAR().run(2009)
 
 
+@pytest.mark.skip
 def test_bad_scenario_input():
     case = OSCAR(scen_EFF=np.zeros((100, 2)))
     with pytest.raises(ValueError):
@@ -197,11 +206,13 @@ def test_albedo_error_SHR_URB():
                    alb_for=0.1, alb_gra=0.1).run(2100)
 
 
+@pytest.mark.skip
 def test_set_global_mean_alb():
     result = OSCAR(alb_global=0.1).run(2100)
     assert np.abs(result['GLOBAL_MEAN_ALB'] - 0.1) < 0.0000001
 
 
+@pytest.mark.skip
 def test_set_biome_mean_alb():
     result = OSCAR(alb_cro=0.1).run(2100)
     assert np.abs(result['BIOME_MEAN_ALB']['CRO'] - 0.1) < 0.0000001

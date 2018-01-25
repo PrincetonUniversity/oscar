@@ -16,6 +16,7 @@ _HARV_ARGS = ['desert', 'forest', 'shrubland', 'grassland', 'cropland',
 _OPTIONS = ['{}2{}'.format(*pair) for pair in permutations(_BIOMES, 2)]
 
 
+@pytst.mark.skip
 def test_custom_scenario_LULCC():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(
@@ -38,6 +39,7 @@ def test_custom_scenario_LULCC():
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
 
 
+@pytest.mark.skip
 def test_custom_scenario_SHIFT():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(
@@ -60,6 +62,7 @@ def test_custom_scenario_SHIFT():
     np.testing.assert_allclose(result, expected, atol=1.0e-5)
 
 
+@pytest.mark.skip
 def test_custom_scenario_HARV():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(
