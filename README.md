@@ -19,7 +19,7 @@ line.  Note this requires the `pytest` utility, which one can install via:
 ```
 $ conda install -c conda-forge pytest
 ```
-To run the test suite from the root `oscar` directory, run:
+To run the test suite from the root `oscar` directory, use:
 ```
 $ pytest -vv oscar
 ```
