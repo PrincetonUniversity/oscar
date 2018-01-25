@@ -17,6 +17,9 @@ import oscar
 from oscar import OSCAR
 
 
+_ROOT, _ = os.path.split(os.path.abspath(__file__))
+
+
 _TIME_DIAGNOSTICS = [
     'D_mld', 'D_dic', 'D_pH', 'OSNK', 'LSNK', 'D_OHSNK_CH4', 'D_HVSNK_CH4',
     'D_XSNK_CH4', 'D_HVSNK_N2O', 'D_O3t', 'D_EESC', 'D_O3s',
@@ -43,7 +46,7 @@ def test_scen_rf():
 
 
 def load_expected_data(end_year, parameter):
-    path = 'data/{}-{}.csv'.format(parameter, end_year)
+    path = os.path.join(_ROOT, 'data/{}-{}.csv'.format(parameter, end_year))
     data = np.loadtxt(path, skiprows=1)
     variables = _TIME_DIAGNOSTICS
 
@@ -60,7 +63,8 @@ def test_oscar(kwargs):
     result = simulation.run(end_year)
     expected = load_expected_data(end_year, ' '.join(kwargs.keys()))
     for key, value in expected.iteritems():
-        np.testing.assert_equal(value, result[key])
+        np.testing.assert_allclose(value, result[key],
+                                   atol=1.0e-4, rtol=1.0e-5)
 
 
 # Eventually it would be good to parametrize this to test all constituents

@@ -1,6 +1,8 @@
 # OSCAR
 The compact Earth system model used in teaching ENV367.
 
+[![Build Status](https://jenkins.princeton.edu/buildStatus/icon?job=ENV367/oscar)](https://jenkins.princeton.edu/job/ENV367/job/oscar/)
+
 **Installation**
 
 One can install `OSCAR` by cloning the repository and installing via `pip`:
@@ -17,7 +19,7 @@ line.  Note this requires the `pytest` utility, which one can install via:
 ```
 $ conda install -c conda-forge pytest
 ```
-To run the test suite from the root `oscar` directory, run:
+To run the test suite from the root `oscar` directory, use:
 ```
 $ pytest -vv oscar
 ```
