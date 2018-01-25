@@ -16,7 +16,7 @@ _HARV_ARGS = ['desert', 'forest', 'shrubland', 'grassland', 'cropland',
 _OPTIONS = ['{}2{}'.format(*pair) for pair in permutations(_BIOMES, 2)]
 
 
-@pytst.mark.skip
+@pytest.mark.skip
 def test_custom_scenario_LULCC():
     ROOT = os.path.join(oscar.__path__[0], 'data')
     PATH = os.path.join(
