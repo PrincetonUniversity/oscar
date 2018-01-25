@@ -1,7 +1,7 @@
 # OSCAR
 The compact Earth system model used in teaching ENV367.
 
-[![Build Status](https://jenkins.princeton.edu/job/ENV367/oscar/badge/icon)](https://jenkins.princeton.edu/job/ENV367/oscar)
+[![Build Status](https://jenkins.princeton.edu/buildStatus/icon?job=ENV367/oscar)](https://jenkins.princeton.edu/job/ENV367/job/oscar/)
 
 **Installation**
 
