@@ -1,0 +1,3 @@
+[submodule "oscar-exercises"]
+	path = oscar-exercises
+	url = https://github.com/PrincetonUniversity/oscar-exercises.git
