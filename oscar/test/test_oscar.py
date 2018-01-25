@@ -63,7 +63,8 @@ def test_oscar(kwargs):
     result = simulation.run(end_year)
     expected = load_expected_data(end_year, ' '.join(kwargs.keys()))
     for key, value in expected.iteritems():
-        np.testing.assert_allclose(value, result[key], atol=1.0e-4)
+        np.testing.assert_allclose(value, result[key],
+                                   atol=1.0e-4, rtol=1.0e-5)
 
 
 # Eventually it would be good to parametrize this to test all constituents
