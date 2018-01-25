@@ -47,7 +47,6 @@ def test_scen_rf():
 
 def load_expected_data(end_year, parameter):
     path = os.path.join(_ROOT, 'data/{}-{}.csv'.format(parameter, end_year))
-    print(path)
     data = np.loadtxt(path, skiprows=1)
     variables = _TIME_DIAGNOSTICS
 
