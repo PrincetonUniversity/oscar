@@ -1,6 +1,8 @@
 # OSCAR
 The compact Earth system model used in teaching ENV367.
 
+[![Build Status](https://jenkins.princeton.edu/buildStatus/icon?job=ENV367/oscar)](https://jenkins.princeton.edu/job/ENV367/job/oscar/)
+
 **Installation**
 
 One can install `OSCAR` by cloning the repository and installing via `pip`:
