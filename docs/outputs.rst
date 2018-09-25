@@ -225,11 +225,11 @@ Greenhouse gases
 ----------------
 
 EFF : dict
-    Fossil fuel emissions [Gt yr^-1]
+    Fossil fuel emissions [GtC yr^-1]
 ECH4 : dict
-    Methane emissions [Mt yr^-1]
+    Methane emissions [MtC yr^-1]
 EN2O : dict
-    Nitrous oxide emissions [Mt yr^-1]
+    Nitrous oxide emissions [MtN yr^-1]
 
 Aerosols
 --------
