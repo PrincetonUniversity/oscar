@@ -42,7 +42,7 @@ Resources
   `tutorial <https://matplotlib.org/users/pyplot_tutorial.html>`_ in
   ``matplotlib``'s official documentation is a good starting point.
 - Similarly, for an introduction to ``numpy``, the `Quickstart tutorial
-  <https://docs.scipy.org/doc/numpy-dev/user/quickstart.html>`_ in ``numpy``'s
+  <https://docs.scipy.org/doc/numpy/user/quickstart.html>`_ in ``numpy``'s
   official documentation is also helpful.
   
 See also
