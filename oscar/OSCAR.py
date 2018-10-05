@@ -75,7 +75,7 @@ data_EBC = 'ACCMIP'                     # ACCMIP
 data_RFant = 'IPCC-AR5'                 # '' | IPCC-AR5
 data_RFnat = 'IPCC-AR5'                 # '' | IPCC-AR5
 
-mod_DATAscen = 'trends'                 # raw | offset | smoothX (X in yr) | trends
+mod_DATAscen = 'prescribed'                 # raw | offset | smoothX (X in yr) | trends
 
 scen_ALL = ''                           # '' | stop | cst | RCP8.5 | RCP6.0 | RCP4.5 | RCP2.6
 

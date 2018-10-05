@@ -109,7 +109,7 @@ class OSCAR(object):
                  data_ENOX='EDGAR', data_ECO='EDGAR', data_EVOC='EDGAR',
                  data_ESO2='EDGAR', data_ENH3='EDGAR', data_EOC='ACCMIP',
                  data_EBC='ACCMIP', data_RFant='IPCC-AR5',
-                 data_RFnat='IPCC-AR5', mod_DATAscen='trends', scen_ALL=None,
+                 data_RFnat='IPCC-AR5', mod_DATAscen='prescribed', scen_ALL=None,
                  scen_EFF='stop', scen_LULCC='stop', scen_HARV='stop',
                  scen_SHIFT='stop', scen_ECH4='stop',
                  scen_EN2O='stop', scen_Ehalo='stop', scen_ENOX='stop',
