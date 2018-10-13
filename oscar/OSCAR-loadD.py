@@ -834,11 +834,11 @@ for VAR in ['FF','CH4','N2O']:
     exec('scen = scen_E'+VAR)
 
     # stop emissions
-    if (scen == 'stop')&(ind_final > ind_cdiac):
+    if (scen == 'stop')&(ind_final >= 300):
         if VAR in ['FF']:
-            exec('E'+VAR+'[ind_cdiac+1:,...] = 0')
+            exec('E'+VAR+'[300:,...] = 0')
         else:
-            exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'_0[np.newaxis,...]')
+            exec('E'+VAR+'[300:,...] = E'+VAR+'_0[np.newaxis,...]')
 
     # constant emissions
     elif (scen == 'cst')&(ind_final > ind_cdiac):
@@ -1043,17 +1043,16 @@ for VAR in ['LUC','HARV','SHIFT']:
     exec("_rcp_or_custom = ('RCP' in scen_{0}) | isinstance(scen_{0}, {0}Scenario)".format(scen_VAR))
             
     # stop emissions
-    if _stop & (ind_final > ind_cdiac):
-        exec(VAR+'[ind_cdiac+1:,...] = 0')
-
+    if _stop & (ind_final >= 300):
+        exec(VAR+'[300:,...] = 0')
     # constant emissions
     elif _constant & (ind_final > ind_cdiac):
         exec(VAR+'[ind_cdiac+1:,...] = '+VAR+'[ind_cdiac,...][np.newaxis,...]')        
 
     # RCP scenarios
     # always raw discontinuity
-    elif _rcp_or_custom &(ind_final > ind_cdiac):
-        exec(VAR+'[ind_cdiac+1:,...] = '+VAR+'proj[ind_cdiac+1:,...]')
+    elif _rcp_or_custom &(ind_final >= 300):
+        exec(VAR+'[300:,...] = '+VAR+'proj[300:,...]')
 
 # delete individual datasets
 for VAR in ['LUC','HARV','SHIFT']:
@@ -1246,8 +1245,8 @@ for VAR in ['HFC','PFC','ODS']:
 for VAR in ['HFC','PFC','ODS']:
 
     # stop emissions
-    if (scen_Ehalo == 'stop')&(ind_final > ind_cdiac):
-        exec('E'+VAR+'[ind_cdiac+1:,...] = 0')
+    if (scen_Ehalo == 'stop')&(ind_final >= 300):
+        exec('E'+VAR+'[300:,...] = 0')
 
     # constant emissions
     elif (scen_Ehalo == 'cst')&(ind_final > ind_cdiac):
@@ -1668,8 +1667,8 @@ for VAR in ['NOX','CO','VOC']+['SO2','NH3','OC','BC']:
     exec('scen = scen_E'+VAR)
 
     # stop emissions
-    if (scen == 'stop')&(ind_final > ind_cdiac):
-        exec('E'+VAR+'[ind_cdiac+1:,...] = E'+VAR+'_0[np.newaxis,...]')
+    if (scen == 'stop')&(ind_final >= 300 ):
+        exec('E'+VAR+'[300:,...] = E'+VAR+'_0[np.newaxis,...]')
 
     # constant emissions
     elif (scen == 'cst')&(ind_final > ind_cdiac):
