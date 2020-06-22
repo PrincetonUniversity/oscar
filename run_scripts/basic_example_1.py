@@ -4,6 +4,10 @@
 
 ## GOAL: use the wrapper function to run historical simulations in a Monte Carlo setup
 
+## change the working directory
+import os
+os. chdir(r'C:\Users\danjr\Documents\Teaching\ENV367_Fall2020\OSCAR\\')
+
 ## being in the OSCAR folder, import the wrapper function
 from core_fct.fct_wrap import run_model
 
