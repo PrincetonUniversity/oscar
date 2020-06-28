@@ -12,6 +12,10 @@ from core_fct.fct_loadD import load_all_hist
 from core_fct.fct_loadP import load_all_param
 from core_fct.fct_genMC import generate_config
 
+## change the working directory
+import os
+os. chdir(r'C:\Users\danjr\Documents\Teaching\ENV367_Fall2020\OSCAR\\')
+
 ## choose a regional aggregation
 mod_region = 'Houghton_2001'
 

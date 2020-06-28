@@ -18,6 +18,10 @@ from core_fct.fct_misc import load_data, aggreg_region
 ## import submodel that contains only the land carbon cycle
 from core_fct.fct_process import OSCAR_landC
 
+## change the working directory
+import os
+os. chdir(r'C:\Users\danjr\Documents\Teaching\ENV367_Fall2020\OSCAR\\')
+
 ## set run options
 mod_region = 'Houghton_2017'
 ind0, ind1 = 1750, 2018
