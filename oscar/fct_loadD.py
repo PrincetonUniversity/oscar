@@ -49,11 +49,29 @@ Z. WRAPPERS
 ##################################################
 
 import os
+from pathlib import Path
 import warnings
 import numpy as np
 import xarray as xr
 
-from core_fct.fct_misc import aggreg_region, group_scenarios
+from oscar.fct_misc import aggreg_region, group_scenarios
+
+path_data = str(Path(__file__).parent.resolve() / 'input_data/')+'\\' 
+path_drivers = path_data + 'drivers/'+'\\' 
+
+def load_existing(fname,):
+    '''
+    Load a data file stored in the "/from_OSCARv2/" directory as an xarray
+    dataset
+    '''
+    
+    fpath = path_drivers+fname
+    if os.path.isfile(fpath):
+        with xr.open_dataset(fpath) as TMP: Par = TMP.load()
+        return Par
+    ## otherwise, launch calibration
+    else:
+        raise RuntimeError('file '+fpath+' not found')
 
 
 ##################################################
@@ -124,13 +142,7 @@ def load_emissions_hist(mod_region,
     units = {}
     for data in datasets:
 
-        ## load data if available
-        if os.path.isfile('input_data/drivers/emissions_' + data + '.nc'):
-            with xr.open_dataset('input_data/drivers/emissions_' + data + '.nc') as TMP: 
-                For1 = TMP.load()
-
-        ## display message otherwise
-        else: raise IOError('{0} not available'.format(data))
+        For1 = load_existing('emissions_' + data + '.nc')
 
         ## get and check units
         for VAR in For1:
@@ -276,14 +288,8 @@ def load_emissions_scen(mod_region,
     For0 = []
     units = {}
     for data in datasets:
-
-        ## load data if available
-        if os.path.isfile('input_data/drivers/emissions_' + data + '.nc'):
-            with xr.open_dataset('input_data/drivers/emissions_' + data + '.nc') as TMP: 
-                For1 = TMP.load()
-
-        ## display message otherwise
-        else: raise IOError('{0} not available'.format(data))
+        
+        For1 = load_existing('emissions_' + data + '.nc')
 
         ## get and check units
         for VAR in For1:
@@ -434,12 +440,7 @@ def load_landuse_hist(mod_region,
     for data in datasets:
 
         ## load data if available
-        if os.path.isfile('input_data/drivers/land-use_' + data + '.nc'):
-            with xr.open_dataset('input_data/drivers/land-use_' + data + '.nc') as TMP: 
-                For1 = TMP.load()
-
-        ## display message otherwise
-        else: raise IOError('{0} not available'.format(data))
+        For1 = load_existing('land-use_' + data + '.nc')
 
         ## get and check units
         for VAR in For1:
@@ -533,12 +534,7 @@ def load_landuse_scen(mod_region,
     for data in datasets:
 
         ## load data if available
-        if os.path.isfile('input_data/drivers/land-use_' + data + '.nc'):
-            with xr.open_dataset('input_data/drivers/land-use_' + data + '.nc') as TMP: 
-                For1 = TMP.load()
-
-        ## display message otherwise
-        else: raise IOError('{0} not available'.format(data))
+        For1 = load_existing('land-use_' + data + '.nc')
 
         ## get and check units
         for VAR in For1:
@@ -629,11 +625,11 @@ def load_RFdrivers_hist(
     for data in datasets:
 
         ## load data if available
-        if os.path.isfile('input_data/drivers/' + data + '.nc'):
-            with xr.open_dataset('input_data/drivers/' + data + '.nc') as TMP: 
+        if os.path.isfile(path_data+'drivers/' + data + '.nc'):
+            with xr.open_dataset(path_data+'drivers/' + data + '.nc') as TMP: 
                 For1 = TMP.load()
-        elif os.path.isfile('input_data/observations/' + data + '.nc'):
-            with xr.open_dataset('input_data/observations/' + data + '.nc') as TMP: 
+        elif os.path.isfile(path_data+'observations/' + data + '.nc'):
+            with xr.open_dataset(path_data+'/observations/' + data + '.nc') as TMP: 
                 For1 = TMP.load()
 
         ## display message otherwise
@@ -760,12 +756,7 @@ def load_RFdrivers_scen(
     for data in datasets:
 
         ## load data if available
-        if os.path.isfile('input_data/drivers/' + data + '.nc'):
-            with xr.open_dataset('input_data/drivers/' + data + '.nc') as TMP: 
-                For1 = TMP.load()
-
-        ## display message otherwise
-        else: raise IOError('{0} not available'.format(data))
+        For1 = load_existing(data + '.nc')
 
         ##---
 

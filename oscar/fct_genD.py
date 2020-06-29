@@ -23,7 +23,7 @@ import xarray as xr
 
 from scipy.stats import theilslopes
 
-from core_fct.fct_misc import extend_timeseries
+from oscar.fct_misc import extend_timeseries
 
 
 ##################################################

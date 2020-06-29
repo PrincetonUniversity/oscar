@@ -92,11 +92,28 @@ Z. WRAPPER
 ##################################################
 
 import os
+from pathlib import Path
 import numpy as np
 import xarray as xr
 
-from core_fct.fct_calib import calib_land_TRENDYv7
+from oscar.fct_calib import calib_land_TRENDYv7
 
+path_from_v2 = str(Path(__file__).parent.resolve() / 'input_data/parameters/from_OSCARv2/')+'\\'
+path_parameters = str(Path(__file__).parent.resolve() / 'input_data/parameters/')+'\\'
+
+def load_existing(fname,recalibrate=False):
+    '''
+    Load a data file stored in the "/from_OSCARv2/" directory as an xarray
+    dataset
+    '''
+    
+    fpath = path_from_v2+fname
+    if os.path.isfile(fpath) and not recalibrate:
+        with xr.open_dataset(fpath) as TMP: Par = TMP.load()
+        return Par
+    ## otherwise, launch calibration
+    else:
+        raise RuntimeError('embedded calibration not available yet')
 
 ##################################################
 ##   1. CARBON DIOXIDE
@@ -181,15 +198,8 @@ def load_ocean_chem(**useless):
 ## transient response of oceanic carbon-cycle
 ## calibrated on CMIP5 models
 def load_ocean_CMIP5(recalibrate=False, **useless):
-
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/ocean_CMIP5.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/ocean_CMIP5.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_ocean_CMIP5()
-
+    
+    Par = load_existing('ocean_CMIP5.nc',recalibrate=recalibrate)
     ## return
     return Par
 
@@ -219,7 +229,7 @@ def load_land_misc(**useless):
 
 ## preindustrial land carbon-cycle
 ## calibrated on TRENDYv7 models
-def load_land_TRENDYv7(mod_region, recalibrate=False, path_in='input_data/parameters/', **useless):
+def load_land_TRENDYv7(mod_region, recalibrate=False, path_in=path_parameters, **useless):
 
     ## load from existing file
     if os.path.isfile(path_in + 'land_TRENDYv7__' + mod_region + '.nc') and not recalibrate:
@@ -235,14 +245,8 @@ def load_land_TRENDYv7(mod_region, recalibrate=False, path_in='input_data/parame
 ## transient response of land carbon-cycle
 ## calibrated on CMIP5 models
 def load_land_CMIP5(mod_region, recalibrate=False, **useless):
-
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/land_CMIP5__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/land_CMIP5__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_land_CMIP5(mod_region=mod_region)
+    
+    Par = load_existing('land_CMIP5__' + mod_region + '.nc',recalibrate=recalibrate)
 
     ## return
     return Par
@@ -276,12 +280,7 @@ def load_land_wooduse(mod_region, recalibrate=False, **useless):
     ## other parameters
     ## (Earles et al., 2012; doi:10.1038/nclimate1535)
     ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/land_Earles_2012__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/land_Earles_2012__' + mod_region + '.nc') as TMP: Par2 = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par2 = calib_land_Earles_2012(mod_region=mod_region)
+    Par2 = load_existing('land_Earles_2012__' + mod_region + '.nc', recalibrate=recalibrate)
 
     ## return
     return xr.merge([Par, Par2])
@@ -292,14 +291,8 @@ def load_land_wooduse(mod_region, recalibrate=False, **useless):
 ## (Randerson et al., 2013; doi:10.3334/ORNLDAAC/1191)
 def load_land_GFED3(mod_region, recalibrate=False, **useless):
     
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/land_GFED3__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/land_GFED3__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_land_GFED3(mod_region=mod_region)
-
+    Par = load_existing('land_GFED3__' + mod_region + '.nc',recalibrate=recalibrate)
+    
     ## return
     return Par
 
@@ -387,14 +380,8 @@ def load_permafrost_all(**useless):
 ## calibrated on WETCHIMP
 def load_wetlands_WETCHIMP(mod_region, recalibrate=False, **useless):
     ## TODO v3.2: properly uncouple from land cover data
-
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/wetlands_WETCHIMP__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/wetlands_WETCHIMP__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_wetlands_WETCHIMP(mod_region=mod_region)
+    
+    Par = load_existing('wetlands_WETCHIMP__' + mod_region + '.nc', recalibrate=recalibrate)
 
     ## return
     return Par
@@ -464,14 +451,8 @@ def load_atmosphere_misc(**useless):
 ## calibrated on CCMVal2
 def load_atmosphere_CCMVal2(recalibrate=False, **useless):
     
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/atmosphere_CCMVal2.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/atmosphere_CCMVal2.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_atmosphere_CCMVal2()
-
+    Par = load_existing('atmosphere_CCMVal2.nc', recalibrate=recalibrate)
+    
     ## return
     return Par
 
@@ -670,13 +651,7 @@ def load_halo_lifetime(**useless):
 def load_regions_HTAP(mod_region, recalibrate=False, **useless):
     ## TODO v3.2: maybe? correct fractions to account only for land...
     
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/regions_HTAP__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/regions_HTAP__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_regions_HTAP(mod_region=mod_region)
+    Par = load_existing('regions_HTAP__' + mod_region + '.nc',recalibrate=recalibrate)
 
     ## return
     return Par
@@ -772,13 +747,8 @@ def load_O3t_regional(**useless):
 def load_O3t_response(recalibrate=False, **useless):
     ## TODO v3.2: add old OxComp
     
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/ozochem_ACCMIP.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/ozochem_ACCMIP.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_ozochem_ACCMIP()
+    Par = load_existing('ozochem_ACCMIP.nc',recalibrate=recalibrate)
+
 
     ## extra (old) parameterizations
     ## (Ehhalt et al., 2001; IPCC AR3 WG1 Chapter 4) (Table 4.11)
@@ -944,13 +914,7 @@ def load_AER_regional(**useless):
 def load_AER_atmoload(recalibrate=False, **useless):
     ## TODO v3.2: add dust and salt
     
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/aerchem_ACCMIP.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/aerchem_ACCMIP.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_aerchem_ACCMIP()
+    Par = load_existing('aerchem_ACCMIP.nc')
 
     ## add option to turn off nitrate, dust and salt aerosols
     Par2 = xr.Dataset()
@@ -1207,13 +1171,7 @@ def load_RFaer_indirect(**useless):
 def load_regions_Reddy_2007(mod_region, recalibrate=False, **useless):
     ## TODO v3.2: maybe? correct fractions to account only for land...
     
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/regions_Reddy_2007__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/regions_Reddy_2007__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_regions_Reddy_2007(mod_region=mod_region)
+    Par = load_existing('regions_Reddy_2007__' + mod_region + '.nc')
 
     ## return
     return Par
@@ -1266,12 +1224,7 @@ def load_RFlcc_all(mod_region, recalibrate=False, **useless):
     ## other parameters
     ## /!\ compiled from various land cover, albedo and radiative flux climatologies
     ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/albedo_all__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/albedo_all__' + mod_region + '.nc') as TMP: Par2 = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par2 = calib_albedo_all(mod_region=mod_region)
+    Par2 = load_existing('albedo_all__' + mod_region + '.nc')
 
     ## return
     return xr.merge([Par, Par2])
@@ -1340,14 +1293,8 @@ def load_RF_atmfrac(**useless):
 ## temperature response
 ## calibrated on CMIP5 models
 def load_temp_CMIP5(mod_region, recalibrate=False, **useless):
-
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/temp_CMIP5__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/temp_CMIP5__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_temp_CMIP5(mod_region=mod_region)
+    
+    Par = load_existing('temp_CMIP5__' + mod_region + '.nc',recalibrate=recalibrate)
 
     ## return
     return Par
@@ -1360,14 +1307,8 @@ def load_temp_CMIP5(mod_region, recalibrate=False, **useless):
 ## precipitation response
 ## calibrated on CMIP5 models
 def load_prec_CMIP5(mod_region, recalibrate=False, **useless):
-
-    ## load from existing file
-    if os.path.isfile('input_data/parameters/from_OSCARv2/prec_CMIP5__' + mod_region + '.nc') and not recalibrate:
-        with xr.open_dataset('input_data/parameters/from_OSCARv2/prec_CMIP5__' + mod_region + '.nc') as TMP: Par = TMP.load()
-    ## otherwise, launch calibration
-    else:
-        raise RuntimeError('embedded calibration not available yet')
-        #Par = calib_prec_CMIP5(mod_region=mod_region)
+    
+    Par = load_existing('prec_CMIP5__' + mod_region + '.nc',recalibrate=recalibrate)
 
     ## return
     return Par

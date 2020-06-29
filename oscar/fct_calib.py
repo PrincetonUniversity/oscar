@@ -38,7 +38,7 @@ import warnings
 import numpy as np
 import xarray as xr
 
-from core_fct.fct_misc import aggreg_region
+from oscar.fct_misc import aggreg_region
 
 
 ##################################################

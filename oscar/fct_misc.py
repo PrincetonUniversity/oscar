@@ -17,10 +17,14 @@ The fact that you are presently reading this means that you have had knowledge o
 ##################################################
 
 import os
+from pathlib import Path
 import csv
 import warnings
 import numpy as np
 import xarray as xr
+
+path_data = str(Path(__file__).parent.resolve() / 'input_data/')+'\\' 
+
 
 
 ##################################################
@@ -87,12 +91,12 @@ def aggreg_region(ds_in, mod_region, weight_var={}, old_axis='reg_iso', new_axis
     ds_out = ds_in.copy(deep=True)
 
     ## region mapping files to be loaded
-    list_load = [zou for zou in os.listdir('input_data/regions/') if all([_  in zou for _ in ['dico_', '.csv']])]
+    list_load = [zou for zou in os.listdir(path_data+'regions/') if all([_  in zou for _ in ['dico_', '.csv']])]
 
     ## load and create combined dictionary
     dico = {}
     for zou in list_load:
-        with open('input_data/regions/' + zou) as f: TMP = np.array([line for line in csv.reader(f)])
+        with open(path_data+'regions/' + zou) as f: TMP = np.array([line for line in csv.reader(f)])
         ## ISO-formated regions
         if 'ISO' in zou: 
             dico = {**dico, **{int(key):int(val) for key, val in zip(TMP[1:,0], TMP[1:,TMP[0,:].tolist().index(mod_region)])}}
@@ -101,7 +105,7 @@ def aggreg_region(ds_in, mod_region, weight_var={}, old_axis='reg_iso', new_axis
             dico = {**dico, **{(key0, key1):int(val) for key0, key1, val in zip(TMP[1:,0], TMP[1:,1], TMP[1:,TMP[0,:].tolist().index(mod_region)])}}
 
     ## load long region names
-    with open('input_data/regions/regions_long_name.csv') as f: 
+    with open(path_data+'regions/regions_long_name.csv') as f: 
         TMP = np.array([line for line in csv.reader(f)])
     long_name = {n:name for n, name in enumerate(TMP[1:,TMP[0,:].tolist().index(mod_region)])}
 
@@ -157,7 +161,7 @@ def load_data(name):
     '''
 
     ## lists all available files
-    list_files = [os.path.join(dp, f) for dp, dn, fn in os.walk('input_data/') for f in fn if f[-3:] == '.nc']
+    list_files = [os.path.join(dp, f) for dp, dn, fn in os.walk(path_data) for f in fn if f[-3:] == '.nc']
     
     ## check compatible files
     okay_files = [f for f in list_files if name in f]

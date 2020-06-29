@@ -65,8 +65,8 @@ B. SUB-MODELS
 import numpy as np
 import xarray as xr
 
-from core_fct.cls_main import Model
-from core_fct.fct_misc import Int_ExpInt as Int_dflt
+from oscar.cls_main import Model
+from oscar.fct_misc import Int_ExpInt as Int_dflt
 
 
 ##################################################

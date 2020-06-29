@@ -21,10 +21,10 @@ import xarray as xr
 
 from time import perf_counter
 
-from core_fct.fct_loadP import load_all_param
-from core_fct.fct_loadD import load_all_hist
-from core_fct.fct_genMC import generate_config, generate_drivers
-from core_fct.fct_genD import create_hist_drivers, create_scen_drivers
+from oscar.fct_loadP import load_all_param
+from oscar.fct_loadD import load_all_hist
+from oscar.fct_genMC import generate_config, generate_drivers
+from oscar.fct_genD import create_hist_drivers, create_scen_drivers
 
 
 ##################################################

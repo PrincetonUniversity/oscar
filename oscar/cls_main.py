@@ -19,7 +19,7 @@ import xarray as xr
 
 from time import perf_counter
 
-from core_fct.fct_misc import Int_ExpInt as Int_dflt
+from oscar.fct_misc import Int_ExpInt as Int_dflt
 
 
 ##################################################
