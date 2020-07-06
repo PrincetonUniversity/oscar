@@ -113,7 +113,7 @@ def run_model(model, inds, Par0=None, For0=None, Ini0=None, For1=None, Ini1=None
     if type(For0) == xr.Dataset:
         For_hist = generate_drivers(create_hist_drivers(For0, inds=inds), nMC=nMC)
     ## or just read file
-    elif type(Par0) == str:
+    elif type(For0) == str:
         with xr.open_dataset('results/' + For0 + '_For_hist.nc') as TMP: For_hist = TMP.load()
 
     ##-----
