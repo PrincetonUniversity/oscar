@@ -4,22 +4,19 @@
 
 ## GOAL: use the wrapper function to run historical simulations in a Monte Carlo setup
 
-## change the working directory
-#import os
-#os. chdir(r'C:\Users\danjr\Documents\Teaching\ENV367_Fall2020\OSCAR\\')
-
 ## being in the OSCAR folder, import the wrapper function
-import core_fct
-from core_fct.fct_wrap import run_model
+from oscar.fct_wrap import run_model
 
 ## import the OSCAR model
-from core_fct.fct_process import OSCAR
+from oscar.fct_process import OSCAR
 
 ## run the model and save output
 ## note: the creation of secondary drivers is rather long!
 ## note: requires defining a 'mod_region' and the number of MC elements 'nMC'
-RUN_a = run_model(OSCAR, (1750, 1750, 2014), mod_region='Houghton_2001', nMC=200, output=True)
+RUN_a = run_model(OSCAR, (1750, 1750, 2014), mod_region='Houghton_2001', nMC=1, output=True)
 OUT = RUN_a['Out_hist']
+
+stophere
 
 ## import matplotlib
 import matplotlib.pyplot as plt
@@ -36,11 +33,11 @@ plt.fill_between(OUT.year, OUT.D_Tg.mean('config') - OUT.D_Tg.std('config'), OUT
 ## GOAL: use the wrapper function to run the RCP scenarios in a Monte Carlo setup
 
 ## same imports as before
-from core_fct.fct_wrap import run_model
-from core_fct.fct_process import OSCAR
+from oscar.fct_wrap import run_model
+from oscar.fct_process import OSCAR
 
 ## import function to load scenarios provided with OSCAR
-from core_fct.fct_loadD import load_all_scen
+from oscar.fct_loadD import load_all_scen
 
 ## load RCP-specific drivers
 For_rcp = load_all_scen(mod_region='RCP_5reg', group_scen=['RCP2.6', 'RCP4.5', 'RCP6.0', 'RCP8.5'], LCC='gross')
