@@ -7,5 +7,6 @@ setup(name='OSCAR',
           'matplotlib==3.2.1',
           'xarray==0.15.1',
           'pandas==1.0.4',
-          'numpy==1.18.1'], # matching package versions from py37_OSCAR_windows
+          'numpy==1.18.1',
+          'netcdf4==1.4.2'], # matching package versions from py37_OSCAR_windows
       )
