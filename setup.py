@@ -8,5 +8,5 @@ setup(name='OSCAR',
           'xarray==0.15.1',
           'pandas==1.0.4',
           'numpy==1.18.1',
-          'netcdf4==1.4.2'], # matching package versions from py37_OSCAR_windows
+          'netcdf4==1.5.3'], # matching package versions from py37_OSCAR_windows
       )
