@@ -135,7 +135,8 @@ def run_model(model, inds, Par0=None, For0=None, Ini0=None, For1=None, Ini1=None
 
     ## 1b. HISTORICAL RUN
     Ini_hist = Out_hist = None
-    if not type(Ini1) == str:
+    #if not type(Ini1) == str:
+    if Ini1 is None: # only run the historical simulation if Ini1 is not provided
 
         ## create initial steady state
         if Ini0 is None:
@@ -192,6 +193,9 @@ def run_model(model, inds, Par0=None, For0=None, Ini0=None, For1=None, Ini1=None
         ## or just read file
         elif type(Ini1) == str:
             with xr.open_dataset('results/' + Ini1 + '_Ini_scen.nc') as TMP: Ini_scen = TMP.load()
+        ## otherwise Ini_scen is set to Ini_1 is kept as it is (a DataSet)
+        else:
+            Ini_scen = Ini1
 
         ## save (Ini_scen)
         if save is not None:

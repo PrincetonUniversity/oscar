@@ -401,6 +401,7 @@ def create_scen_drivers(Hist, Scen, inds, data_connect='transition', trans_lengt
 
     ## unpack indexes
     indH, indF = inds[-2:]
+    print(indH,indF)
 
     ## get units
     units = {VAR:Hist[VAR].units for VAR in Hist if 'units' in Hist[VAR].attrs}
