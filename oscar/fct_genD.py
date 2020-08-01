@@ -409,6 +409,7 @@ def create_scen_drivers(Hist, Scen, inds, data_connect='transition', trans_lengt
     ## create combined variables
     For = xr.Dataset()
     for VAR in Hist:
+        print(VAR)
         if VAR in Scen:
 
             ## stable axis for extension
