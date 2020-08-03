@@ -87,6 +87,9 @@ def run_model(model, inds, Par0=None, For0=None, Ini0=None, For1=None, Ini1=None
                         default = False
     **model_args        all other arguments are passed on to model
     '''
+    
+    ## DJR added: ensure that the dimensions of For1 are in the right order
+    For1 = For1.transpose('year','reg_land', 'spc_halo', 'scen', 'bio_to', 'bio_from', 'bio_land')
 
     ## getting time counter
     print(model.name + ' loading (historical)')
