@@ -56,8 +56,8 @@ import xarray as xr
 
 from oscar.fct_misc import aggreg_region, group_scenarios
 
-path_data = str(Path(__file__).parent.resolve() / 'input_data/')+'\\' 
-path_drivers = path_data + 'drivers/'+'\\' 
+path_data = str(Path(__file__).parent.resolve() / 'input_data/')+'//' 
+path_drivers = path_data + 'drivers/'+'//' 
 
 def load_existing(fname,):
     '''

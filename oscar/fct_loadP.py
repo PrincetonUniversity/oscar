@@ -98,8 +98,8 @@ import xarray as xr
 
 from oscar.fct_calib import calib_land_TRENDYv7
 
-path_from_v2 = str(Path(__file__).parent.resolve() / 'input_data/parameters/from_OSCARv2/')+'\\'
-path_parameters = str(Path(__file__).parent.resolve() / 'input_data/parameters/')+'\\'
+path_from_v2 = str(Path(__file__).parent.resolve() / 'input_data/parameters/from_OSCARv2/')+'//'
+path_parameters = str(Path(__file__).parent.resolve() / 'input_data/parameters/')+'//'
 
 def load_existing(fname,recalibrate=False):
     '''
