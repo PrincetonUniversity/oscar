@@ -9,5 +9,5 @@ setup(name='OSCAR',
           'pandas==1.0.4',
           'numpy==1.18.1',
           'netcdf4==1.5.3',
-          'cartopy==0.17.0'], # matching package versions from py37_OSCAR_windows
+          'cartopy'], # matching package versions from py37_OSCAR_windows
       )

@@ -23,7 +23,7 @@ import warnings
 import numpy as np
 import xarray as xr
 
-path_data = str(Path(__file__).parent.resolve() / 'input_data/')+'\\' 
+path_data = str(Path(__file__).parent.resolve() / 'input_data/')+'//' 
 
 
 

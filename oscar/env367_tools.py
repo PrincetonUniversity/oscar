@@ -9,7 +9,10 @@ import numpy as np
 import xarray as xr
 
 # hard-coded path to the read-only data directory
-default_dir = r'C:\Users\danjr\Documents\Teaching\ENV367_Fall2020\oscar-exercises\saved-data\\'
+dir_windows_dan = r'C:\Users\danjr\Documents\Teaching\ENV367_Fall2020\oscar-exercises\saved-data\\'
+dir_adroit_dan = r'/home/druth/ENV367_Fall2020/oscar-exercises/saved-data//'
+dir_adroit_shared = r'/scratch/network/climate/oscar-exercises/saved-data//'
+default_dir = dir_adroit_shared
 
 def save_run_model_output(output,name_start,data_dir=default_dir):
     '''
@@ -66,6 +69,7 @@ def load_model_output(name_start,data_dir=default_dir):
     for key in keys:
         try:
             fpath = data_dir+name_start+'_'+key+'.nc'
+            print(fpath)
             with xr.open_dataset(fpath) as TMP: x = TMP.load()
             loaded_model_output[key] = x
         except FileNotFoundError:
